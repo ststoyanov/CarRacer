@@ -59,8 +59,7 @@ public class GameWindow
 		buttonPanel.setLayout(new GridLayout(1,2));
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.PAGE_AXIS));
 		
-			
-		
+		window.getRootPane().setDefaultButton(playButton);
 		window.setContentPane(mainPanel);
 		window.setResizable(false);
 		window.pack();
@@ -76,8 +75,6 @@ public class GameWindow
 		this();
 		window.setTitle(name);
 	}
-	
-
 	
 	/**
 	 * Initialize the window and run the game.
