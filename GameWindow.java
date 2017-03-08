@@ -10,6 +10,9 @@ public class GameWindow
 	private JFrame window;
 	private JPanel mainPanel;
 	private static Racer racer;
+	private static JButton playButton;
+	private static JButton stopButton;
+	private static JLabel curScore;
 	
 	/**
 	 * Creates the game window.
@@ -18,9 +21,47 @@ public class GameWindow
 		window = new JFrame();
         window.setTitle("Racer");
 		
+		//create content
+		playButton = new JButton("PLAY");
+		stopButton = new JButton("STOP");
+		curScore = new JLabel("Score: 0");
 		racer = new Racer();
+		JPanel buttonPanel = new JPanel();
+		mainPanel = new JPanel();
 		
-		window.setContentPane(racer.getPanel());
+		//setting up the buttons
+		stopButton.setEnabled(false);
+		playButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				playButton.setEnabled(false);
+				stopButton.setEnabled(true);
+				racer.start();
+			}
+		});
+		stopButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				playButton.setEnabled(true);
+				stopButton.setEnabled(false);
+				racer.stop();
+			}
+		});
+		
+		//add content to the main panel
+		mainPanel.add(curScore);
+		mainPanel.add(racer.getPanel());
+		buttonPanel.add(playButton);
+		buttonPanel.add(stopButton);
+		mainPanel.add(buttonPanel);
+		
+		//set layout
+		buttonPanel.setLayout(new GridLayout(1,2));
+		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.PAGE_AXIS));
+		
+			
+		
+		window.setContentPane(mainPanel);
 		window.setResizable(false);
 		window.pack();
 		window.setVisible(true);
@@ -36,15 +77,22 @@ public class GameWindow
 		window.setTitle(name);
 	}
 	
+
+	
 	/**
-	 * Initialize the window and start the game.
+	 * Initialize the window and run the game.
 	 * @param args unused
 	 */
 	public static void main(String[] args){
 		new GameWindow();
-		racer.start();
-		while(racer.isPlaying()){
+		
+		while(true){
 			racer.update();
+			curScore.setText("Score: " + racer.getScore());
+			if(!racer.isPlaying()&&!playButton.isEnabled()){
+				playButton.setEnabled(true);
+				stopButton.setEnabled(false);
+			}
 		}
 	}
 }
