@@ -9,10 +9,11 @@ public class GameWindow
 {
 	private JFrame window;
 	private JPanel mainPanel;
-	private static Racer racer;
-	private static JButton playButton;
-	private static JButton stopButton;
-	private static JLabel curScore;
+	private Racer racer;
+	private JButton playButton;
+	private JButton stopButton;
+	private JLabel curScore;
+	private volatile boolean  startGame = false;
 	
 	/**
 	 * Creates the game window.
@@ -34,17 +35,13 @@ public class GameWindow
 		playButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				playButton.setEnabled(false);
-				stopButton.setEnabled(true);
-				racer.start();
+				startGame = true;
 			}
 		});
 		stopButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				playButton.setEnabled(true);
-				stopButton.setEnabled(false);
-				racer.stop();
+				endGame();
 			}
 		});
 		
@@ -77,19 +74,38 @@ public class GameWindow
 	}
 	
 	/**
+	 * Start the game.
+	 */
+	public void startGame(){
+		startGame = false;
+		playButton.setEnabled(false);
+		stopButton.setEnabled(true);
+		racer.start();
+		while(racer.isPlaying()){
+			racer.update();
+			curScore.setText("Score: " + racer.getScore());
+		}
+		endGame();
+	}
+	
+	/**
+	 * End the game.
+	 */
+	public void endGame(){
+		playButton.setEnabled(true);
+		stopButton.setEnabled(false);
+		racer.stop();
+	}
+	
+	/**
 	 * Initialize the window and run the game.
 	 * @param args unused
 	 */
 	public static void main(String[] args){
-		new GameWindow();
-		
+		GameWindow game = new GameWindow();
 		while(true){
-			racer.update();
-			curScore.setText("Score: " + racer.getScore());
-			if(!racer.isPlaying()&&!playButton.isEnabled()){
-				playButton.setEnabled(true);
-				stopButton.setEnabled(false);
-			}
+			if(game.startGame)
+				game.startGame();
 		}
 	}
 }
