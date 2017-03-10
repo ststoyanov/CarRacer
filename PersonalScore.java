@@ -1,13 +1,13 @@
 
 /**
- * Contains a single personal score.
+ * Contains a single personal high score with name and score.
  */
 public class PersonalScore{
 	private String name;
 	private int score;
 	
 	/**
-	 * Creates a personal score with give name and score.
+	 * Creates a personal score with given name and score.
 	 * @param name the name of the scorer
 	 * @param score the score
 	 */
