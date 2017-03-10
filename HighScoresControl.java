@@ -2,13 +2,13 @@
 /**
  * Controls the high scores.
  */
-public class HighScores{
+public class HighScoresControl{
 	private PersonalScore[] highScores = new PersonalScore[10];
 	
 	/**
 	 * Creates the top 10 high scores.
 	 */
-	public HighScores(){
+	public HighScoresControl(){
 		highScores[0] = new PersonalScore("zabraih",2000);
 		highScores[1] = new PersonalScore("John", 1800);
 		highScores[2] = new PersonalScore("Jack", 1700);

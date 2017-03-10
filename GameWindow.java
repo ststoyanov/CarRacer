@@ -7,9 +7,9 @@ import java.awt.event.*;
  */
 public class GameWindow
 {
-	private HighScoresWin highScoresWindow = new HighScoresWin();
-	private HighScores scores = new HighScores();
-	private int highScoreInt = scores.getHighScore();
+	private HighScoresWin highScoresWindow;
+	private HighScoresControl scores;
+	//private int highScoreInt = scores.getHighScore();
 	private JFrame window;
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -35,7 +35,8 @@ public class GameWindow
 		playButton = new JButton("PLAY");
 		stopButton = new JButton("STOP");
 		curScore = new JLabel("Score: 0");
-		highScore = new JLabel("High Score: " + highScoreInt);
+		scores = new HighScoresControl();
+		highScore = new JLabel("High Score: " + scores.getHighScore());
 		racer = new Racer();
 
 		//setting up the buttons
@@ -73,13 +74,13 @@ public class GameWindow
 		window.setContentPane(mainPanel);
 		window.setResizable(false);
 		window.pack();
-		window.setLocationByPlatform(true);
+		window.setLocation(0,0);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	/**
-	 * Creates the game window with a title
+	 * Creates the game window with a given title
 	 * @param name name of the game
 	 */
     public GameWindow(String name){
@@ -92,6 +93,7 @@ public class GameWindow
 	 */
 	public void startGame(){
 		startGame = false;
+		if(highScoresWindow != null)
 		highScoresWindow.dispose();
 		playButton.setEnabled(false);
 		stopButton.setEnabled(true);
@@ -110,15 +112,15 @@ public class GameWindow
 		racer.stop();
 		playButton.setEnabled(true);
 		stopButton.setEnabled(false);
-		if(racer.getScore() > highScoreInt){
-			highScoreInt = racer.getScore();
-			highScore.setText("High Score: " + highScoreInt);
+		
+		if(racer.getScore() > scores.getHighScore()){
+			highScore.setText("High Score: " + racer.getScore());
 		}
+		highScoresWindow = new HighScoresWin();
 		if(racer.getScore() > scores.getLowScore())
 			highScoresWindow.openAdd(scores,racer.getScore());
 		else
 			highScoresWindow.open(scores);
-
 	}
 	
 	/**
