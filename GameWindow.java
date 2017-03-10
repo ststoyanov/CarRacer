@@ -7,7 +7,6 @@ import java.awt.event.*;
  */
 public class GameWindow
 {
-	private HighScoresWin highScoresWindow;
 	private HighScoresDialog highScoresDialog;
 	private HighScoresControl scores;
 	private JFrame window;
