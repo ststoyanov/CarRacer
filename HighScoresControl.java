@@ -6,7 +6,7 @@ public class HighScoresControl{
 	private PersonalScore[] highScores = new PersonalScore[10];
 	
 	/**
-	 * Creates the top 10 high scores.
+	 * Constructor. Creates the top 10 high scores.
 	 */
 	public HighScoresControl(){
 		highScores[0] = new PersonalScore("zabraih",2000);

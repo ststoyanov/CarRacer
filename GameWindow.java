@@ -8,8 +8,8 @@ import java.awt.event.*;
 public class GameWindow
 {
 	private HighScoresWin highScoresWindow;
+	private HighScoresDialog highScoresDialog;
 	private HighScoresControl scores;
-	//private int highScoreInt = scores.getHighScore();
 	private JFrame window;
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -22,7 +22,7 @@ public class GameWindow
 	private volatile boolean  startGame = false;
 	
 	/**
-	 * Creates the game window.
+	 * Constructor. Creates the game window.
 	 */
 	public GameWindow(){
 		window = new JFrame();
@@ -80,7 +80,7 @@ public class GameWindow
 	}
 	
 	/**
-	 * Creates the game window with a given title
+	 * Constructor. Creates the game window with a given title
 	 * @param name name of the game
 	 */
     public GameWindow(String name){
@@ -93,8 +93,8 @@ public class GameWindow
 	 */
 	public void startGame(){
 		startGame = false;
-		if(highScoresWindow != null)
-		highScoresWindow.dispose();
+		if(highScoresDialog != null)
+			highScoresDialog.dispose();
 		playButton.setEnabled(false);
 		stopButton.setEnabled(true);
 		racer.start();
@@ -116,11 +116,11 @@ public class GameWindow
 		if(racer.getScore() > scores.getHighScore()){
 			highScore.setText("High Score: " + racer.getScore());
 		}
-		highScoresWindow = new HighScoresWin();
+		
 		if(racer.getScore() > scores.getLowScore())
-			highScoresWindow.openAdd(scores,racer.getScore());
+			highScoresDialog = new HighScoresDialog(window,scores,racer.getScore());
 		else
-			highScoresWindow.open(scores);
+			highScoresDialog = new HighScoresDialog(window,scores,-1);
 	}
 	
 	/**
