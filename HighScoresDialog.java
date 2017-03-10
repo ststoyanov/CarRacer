@@ -126,6 +126,7 @@ public class HighScoresDialog{
 						mainPanel.add(new JLabel(scores.getName(scorePlace)),scorePlace*2);
 						mainPanel.revalidate();
 						mainPanel.repaint();
+						dialog.getParent().requestFocus();
 					}
 				}
 			});
