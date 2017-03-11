@@ -200,7 +200,7 @@ public class GameArena
             balls.clear();
             objectCount = 0;
             initialised = false;
-
+			stopPresses();
             root.getChildren().clear();
 
             if (window != null)
@@ -452,6 +452,16 @@ public class GameArena
 		return right;
 	}
 
+	/**
+	 * Sets all presses to false.
+	 */
+	 public void stopPresses(){
+		 left = false;
+		 right = false;
+		 up = false;
+		 down = false;
+	 }
+	 
     /** 
      * Acquires the JPanel containing this GameArena.
      * @return The JPanel object containing this GameArena.
