@@ -55,6 +55,7 @@ public class HighScoresControl{
 					highScores[i] = new PersonalScore();
 				}
 			}
+			reader.close();
 		}else{
 			for(int i = 0; i < 10; i++){
 				highScores[i] = new PersonalScore();
