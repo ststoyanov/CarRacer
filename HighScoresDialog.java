@@ -135,15 +135,18 @@ public class HighScoresDialog{
 	
 	
 	/**
-	 * Dispose of the window if there is one
-	 * if there is a queued score for adding, add it with name "Anonymous".
+	 * Dispose of the window if there is one and save the scores
+	 * if there is a queued score for adding, add it with name "anonymous".
 	 */
 	public void dispose(){
 		if(active){
 			if(queuedScore>0){
-				scores.setHighScore(scorePlace,"Anonymous",queuedScore);
+				scores.setHighScore(scorePlace,"anonymous",queuedScore);
 				queuedScore = -1;
 			}
+			try{
+				scores.save();
+			}catch(Exception ex){ ex.printStackTrace(System.out); }
 			dialog.dispose();
 			active = false;
 		}

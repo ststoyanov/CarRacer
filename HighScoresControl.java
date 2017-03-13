@@ -12,44 +12,45 @@ public class HighScoresControl{
 	File highScoresFile;
 	BufferedReader reader;
 	PrintWriter writer;
+	final String filePath = ".highscores";
 	
 	/**
-	 * Constructor. Creates the top 10 high scores.
+	 * Constructor. Loads the high scores.
 	 */
 	public HighScoresControl(){
 		highScores = new PersonalScore[10];
-		highScoresFile = new File(".highscores");
-		load();
+		highScoresFile = new File(filePath);
+		try{
+			load();
+		}catch(IOException ex){ ex.printStackTrace(System.out); }
 	}
 	
-	private void load() {
+	/**
+	 * Load the high scores value from the .highscores file.
+	 * If no such file or bad values fill up the top 10 with empty high scores.
+	 */
+	public void load() throws IOException {
 		String name;
 		int score;
+		int n = 0;
 		String line = null;
 		String[] scoreLine;
 		
+		//If the file exists read it line by line and load the high scores into the game
+		//Else fill up the top 10 with empty high scores
 		if(highScoresFile.exists()){
-			try{
-				reader = new BufferedReader(new FileReader(highScoresFile));
-			}catch(Exception e){
-				e.printStackTrace(System.out);
+			reader = new BufferedReader(new FileReader(highScoresFile));
+			while((line = reader.readLine()) != null){
+				scoreLine = line.split("-");
+				name = scoreLine[0];
+				score = Integer.parseInt(scoreLine[1]);
+				highScores[n] = new PersonalScore(name,score);
+				n++;
+				if(n > 9)
+					break;
 			}
-		
-			try{
-				line = reader.readLine();
-			}catch(IOException e){e.printStackTrace(System.out);}
-		
-			if(line!=null){
-				for(int i = 0; i < 10; i++){
-					try{
-						scoreLine = line.split("-");
-						name = scoreLine[0];
-						score = Integer.parseInt(scoreLine[1]);
-						highScores[i] = new PersonalScore(name,score);
-						line = reader.readLine();
-					}catch(IOException e){e.printStackTrace(System.out);}
-				}
-			}else{
+			//If the .highscores file is corrupted fill up the top 10 with empty high scores
+			if(n < 10 || reader.readLine() != null){
 				for(int i = 0; i < 10; i++){
 					highScores[i] = new PersonalScore();
 				}
@@ -57,27 +58,29 @@ public class HighScoresControl{
 		}else{
 			for(int i = 0; i < 10; i++){
 				highScores[i] = new PersonalScore();
-				}
+			}
 		}
-	//	highScoresFile.setWritable(false);
 	}
 	
-	private void save(){
+	/**
+	 * Saves the top 10 high scores into the .highscores file.
+	 * Creates the file if it does not exist.
+	 */
+	public void save() throws IOException{
 		if(!highScoresFile.exists()){
-			try{
-				highScoresFile.createNewFile();
-			}catch(IOException e){}
+			highScoresFile.createNewFile();
 		}
-		try{
-			writer = new PrintWriter(highScoresFile);
-		}catch(IOException e){e.printStackTrace(System.out);}
-		//highScoresFile.setWritable(true);
+		highScoresFile.setWritable(true);
+		writer = new PrintWriter(highScoresFile);
+		
 		for(int i = 0; i < 10; i++){
 			writer.println(highScores[i].getName()+"-"+highScores[i].getScore());
 		}
+		
 		writer.flush();
 		writer.close();
-		//highScoresFile.setWritable(false);
+		
+		highScoresFile.setWritable(false);
 	}
 	
 	/**
@@ -122,6 +125,5 @@ public class HighScoresControl{
 	 */
 	public void setHighScore(int place, String name, int score){
 		highScores[place] = new PersonalScore(name,score);
-		save();
 	}
 }
