@@ -92,6 +92,7 @@ public class GameWindow
 	 */
 	public void startGame(){
 		startGame = false;
+		racer.getPanel().requestFocusInWindow();
 		if(highScoresDialog != null)
 			highScoresDialog.dispose();
 		playButton.setEnabled(false);
