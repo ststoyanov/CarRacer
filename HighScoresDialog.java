@@ -147,7 +147,7 @@ public class HighScoresDialog{
 	public void dispose(){
 		if(active){
 			if(queuedScore>0){
-				scores.setHighScore(scorePlace,"anonymous",queuedScore);
+				scores.setHighScore(scorePlace,newName.getText(),queuedScore);
 				queuedScore = -1;
 			}
 			try{

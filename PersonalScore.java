@@ -12,6 +12,8 @@ public class PersonalScore{
 	 * @param score the score
 	 */
 	public PersonalScore(String name,int score){
+		if(name.equals(""))
+			name = "anonymous";
 		this.name = name;
 		this.score = score;
 	}
