@@ -3,16 +3,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.regex.Pattern;
 
 /**
- * Controls the high scores.
+ * Controls the high scores and the .highscores file.
  */
 public class HighScoresControl{
 	private PersonalScore[] highScores;
-	File highScoresFile;
-	BufferedReader reader;
-	PrintWriter writer;
-	final String filePath = ".highscores";
+	private File highScoresFile;
+	private BufferedReader reader;
+	private PrintWriter writer;
+	private final String filePath = ".highscores";
 	
 	/**
 	 * Constructor. Loads the high scores.
@@ -32,34 +33,45 @@ public class HighScoresControl{
 	public void load() throws IOException {
 		String name;
 		int score;
-		int n = 0;
+		int lineNumber = 0;
 		String line = null;
 		String[] scoreLine;
+		boolean fileError = false;
+		Pattern regexScore = Pattern.compile("[A-Za-z0-9_-]{1,9}+=+[0-9]+");
 		
 		//If the file exists read it line by line and load the high scores into the game
 		//Else fill up the top 10 with empty high scores
 		if(highScoresFile.exists()){
 			reader = new BufferedReader(new FileReader(highScoresFile));
 			while((line = reader.readLine()) != null){
-				scoreLine = line.split("-");
+				if(!regexScore.matcher(line).matches()){
+					fileError = true;
+					break;
+				}
+				scoreLine = line.split("=");
 				name = scoreLine[0];
 				score = Integer.parseInt(scoreLine[1]);
-				highScores[n] = new PersonalScore(name,score);
-				n++;
-				if(n > 9)
+				highScores[lineNumber] = new PersonalScore(name,score);
+				lineNumber++;
+				if(lineNumber > 10){
 					break;
-			}
-			//If the .highscores file is corrupted fill up the top 10 with empty high scores
-			if(n < 10 || reader.readLine() != null){
-				for(int i = 0; i < 10; i++){
-					highScores[i] = new PersonalScore();
 				}
 			}
+		
+			if(lineNumber != 10)
+				fileError = true;
+			
 			reader.close();
-		}else{
+		} else {
+			fileError = true;
+		}
+		
+		//If the .highscores file is corrupted or missing fill up the top 10 with empty high scores
+		if(fileError){
 			for(int i = 0; i < 10; i++){
 				highScores[i] = new PersonalScore();
 			}
+			throw(new IOException("Corrupted or missing .highscores file"));
 		}
 	}
 	
@@ -75,7 +87,7 @@ public class HighScoresControl{
 		writer = new PrintWriter(highScoresFile);
 		
 		for(int i = 0; i < 10; i++){
-			writer.println(highScores[i].getName()+"-"+highScores[i].getScore());
+			writer.println(highScores[i].getName()+"="+highScores[i].getScore());
 		}
 		
 		writer.flush();
