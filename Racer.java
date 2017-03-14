@@ -33,8 +33,8 @@ public class Racer
 {
     public static final double PLAYER_SPEED = 5;
     public static final int ROAD_SEGMENT_WIDTH = 160;
-    public static final int ROAD_SEGMENT_HEIGHT = 10;
-    public static final int ROAD_CURVE_SPEED = 5;
+    public static final int ROAD_SEGMENT_HEIGHT = 4;
+    public static final int ROAD_CURVE_SPEED = 2;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 	public static final int ROAD_LEFT_BOUND = 300;
@@ -182,7 +182,7 @@ public class Racer
 			}
 			randProb = 0;
 		} else {
-			randProb += 1.0 / (SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT);
+			randProb += 1.0 / (SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT * (10 * ROAD_CURVE_SPEED));
 		}
 		
         currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
