@@ -1,6 +1,11 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import java.util.regex.Pattern;
 
 /**
  * Creates a high score dialog, displaying the top 10 scores.
@@ -66,11 +71,11 @@ public class HighScoresDialog{
 	 * Add new high score if necessary
 	 * @param newScore the new high score
 	 */
-	public void createPanel(int newScore){
+	private void createPanel(int newScore){
 		//set up the panel and it's layout
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(10,2));
-		mainPanel.setPreferredSize(new Dimension(150,150));
+		mainPanel.setPreferredSize(new Dimension(180,160));
 		
 		//if no new score, show the current top 10
 		if(newScore <= 0){
@@ -86,6 +91,7 @@ public class HighScoresDialog{
 			focus = true;
 			queuedScore = newScore;
 			newName = new JTextField();
+			((AbstractDocument) newName.getDocument()).setDocumentFilter(new CustomDocumentFilter());
 			newName.requestFocusInWindow();
 			
 			//add the score at it's place and rearange the rest of the scores
@@ -146,6 +152,38 @@ public class HighScoresDialog{
 			}
 			dialog.dispose();
 			active = false;
+		}
+	}
+
+	// Filter for the newName text field. Only alphabetical, numerical and "_" characters can be entered up to 9 characters.
+	private class CustomDocumentFilter extends DocumentFilter{
+		private Pattern regexCheck = Pattern.compile("[A-Za-z0-9_]+");
+		private int maxChars = 9;
+		
+		@Override
+		public void insertString(FilterBypass fb, int offs, String str, AttributeSet a) throws BadLocationException{
+			if (str == null){
+				return;
+			}
+			
+			if(regexCheck.matcher(str).matches()&&(fb.getDocument().getLength() + str.length()) <= maxChars) {
+				super.insertString(fb,offs,str,a);
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
+		}
+		
+		@Override
+		public void replace(FilterBypass fb, int offset, int length, String str, AttributeSet attrs) throws BadLocationException{
+			if(str == null) {
+				return;
+			}
+			
+			if(regexCheck.matcher(str).matches()&&(fb.getDocument().getLength() + str.length()) <= maxChars){
+				fb.replace(offset,length,str,attrs);
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 }
