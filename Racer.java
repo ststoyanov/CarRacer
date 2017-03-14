@@ -33,10 +33,12 @@ public class Racer
 {
     public static final double PLAYER_SPEED = 5;
     public static final int ROAD_SEGMENT_WIDTH = 160;
-    public static final int ROAD_SEGMENT_HEIGHT= 10;
+    public static final int ROAD_SEGMENT_HEIGHT = 10;
     public static final int ROAD_CURVE_SPEED = 5;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
+	public static final int ROAD_LEFT_BOUND = 300;
+	public static final int ROAD_RIGHT_BOUND = 600;
 
     private GameArena arena;
     private Car player;
@@ -46,6 +48,8 @@ public class Racer
     private double speed = 2.0;
     private boolean playing = false;
     private int score = 0;
+	private int curveDirection = 0; //-1 for left, 1 for right
+	private double randProb = 0; // random probability variable
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -168,7 +172,20 @@ public class Racer
      */
     private RoadSegment nextRoadSegment()
     {
-        currentRoadX += Math.random() * 2 * ROAD_CURVE_SPEED - ROAD_CURVE_SPEED;
+		//checks if the road is out of bounds and if so changes the direction
+		//also randomly changes the direction with increasing chance the longer it hasn't changed
+		if(currentRoadX <= ROAD_LEFT_BOUND || currentRoadX >= ROAD_RIGHT_BOUND || Math.random() < randProb){
+			if(curveDirection == 1 && currentRoadX > ROAD_LEFT_BOUND){
+				curveDirection = -1;
+			} else if(currentRoadX < ROAD_RIGHT_BOUND){
+				curveDirection = 1;
+			}
+			randProb = 0;
+		} else {
+			randProb += 1.0 / (SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT);
+		}
+		
+        currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
         RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT, arena);
         s.setYSpeed(speed);
         return s;
