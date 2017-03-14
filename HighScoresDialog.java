@@ -158,9 +158,9 @@ public class HighScoresDialog{
 		}
 	}
 
-	// Filter for the newName text field. Only alphabetical, numerical and "_" characters can be entered up to 9 characters.
+	// Filter for the newName text field. Only alphabetical,numerical ,"_" and "-" characters can be entered up to 9 characters.
 	private class CustomDocumentFilter extends DocumentFilter{
-		private Pattern regexCheck = Pattern.compile("[A-Za-z0-9_]+");
+		private Pattern regexCheck = Pattern.compile("[A-Za-z0-9_-]+");
 		private int maxChars = 9;
 		
 		@Override
