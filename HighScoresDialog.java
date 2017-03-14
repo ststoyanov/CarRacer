@@ -164,26 +164,26 @@ public class HighScoresDialog{
 		private int maxChars = 9;
 		
 		@Override
-		public void insertString(FilterBypass fb, int offs, String str, AttributeSet a) throws BadLocationException{
-			if (str == null){
+		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attrs) throws BadLocationException{
+			if (string == null){
 				return;
 			}
 			
-			if(regexCheck.matcher(str).matches()&&(fb.getDocument().getLength() + str.length()) <= maxChars) {
-				super.insertString(fb,offs,str,a);
+			if(regexCheck.matcher(string).matches()&&(fb.getDocument().getLength() + string.length()) <= maxChars) {
+				super.insertString(fb,offset,string,attrs);
 			} else {
 				Toolkit.getDefaultToolkit().beep();
 			}
 		}
 		
 		@Override
-		public void replace(FilterBypass fb, int offset, int length, String str, AttributeSet attrs) throws BadLocationException{
-			if(str == null) {
+		public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attrs) throws BadLocationException{
+			if(string == null) {
 				return;
 			}
 			
-			if(regexCheck.matcher(str).matches()&&(fb.getDocument().getLength() + str.length()) <= maxChars){
-				fb.replace(offset,length,str,attrs);
+			if(regexCheck.matcher(string).matches()&&(fb.getDocument().getLength() + string.length() - length) <= maxChars){
+				fb.replace(offset,length,string,attrs);
 			} else {
 				Toolkit.getDefaultToolkit().beep();
 			}
