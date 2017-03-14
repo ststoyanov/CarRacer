@@ -83,15 +83,18 @@ public class Racer
         if(!playing)
         {
             // Create the player's car
-            player = new Car(SCREEN_WIDTH/2, SCREEN_HEIGHT - 150, arena);
+            player = new Car(SCREEN_WIDTH/2 - 30, SCREEN_HEIGHT - 150, arena);
 
+			currentRoadX = SCREEN_WIDTH/2;
+			
             // Create the initial road layout
             for (int s = road.length-1; s >= 0 ; s--)
             {
-                road[s] = nextRoadSegment(); 
+                road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT, arena);
                 road[s].setYPosition(s*ROAD_SEGMENT_HEIGHT);
+				road[s].setYSpeed(speed);
             }
-
+			
             score = 0;
             playing = true;
         }
