@@ -142,7 +142,7 @@ public class HighScoresDialog{
 	
 	/**
 	 * Dispose of the window if there is one and save the scores
-	 * if there is a queued score for adding, add it with name "anonymous".
+	 * if there is a queued score for adding, add it with name "NoName".
 	 */
 	public void dispose(){
 		if(active){

@@ -13,7 +13,7 @@ public class PersonalScore{
 	 */
 	public PersonalScore(String name,int score){
 		if(name.equals(""))
-			name = "anonymous";
+			name = "NoName";
 		this.name = name;
 		this.score = score;
 	}
