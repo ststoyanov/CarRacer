@@ -1,3 +1,5 @@
+import javafx.scene.image.Image;
+
 /**
  * Models a simple Car for the game Racer.
  *
@@ -15,9 +17,13 @@ public class Car
 
     private double xSpeed;
     private double ySpeed;
+	private Sprite sprite;
+	private boolean spriteActive = false;
+	private double width;
+	private double height;
 
     /**
-     * Creates a new Car, at the given location.
+     * Creates a new Car at the given location.
      *
      * @param x The x position on the screen of the centre of the car.
      * @param y The y position on the screen of the centre of the car.
@@ -39,8 +45,54 @@ public class Car
 
         for (int i=0; i < parts.length; i++)
             arena.addRectangle(parts[i]);
+		spriteActive = false;
     }
+	
+	/**
+	 * Creates a new Car with a sprite model at the given location.
+	 * 
+	 * @param spriteURL The URL for the sprite file.
+	 * @param x The x position on the screen of the centre of the car.
+     * @param y The y position on the screen of the centre of the car.
+	 * @param w The width of the car.
+	 * @param h the height of the car.
+     * @param a The GameArena upon which to draw this car.
+     */
+	 public Car(String spriteURL, double x, double y, double w, double h, GameArena a){
+		// Try to open the sprite from the spriteURL.
+		// If successfull create a car with the model, if not draw one with rectangles instead.
+		try{
+			sprite = new Sprite(spriteURL, x, y, w, h);
+			spriteActive = true;
+			
+			arena = a;
+			width = w;
+			height = h;
+			xPosition = x;
+			yPosition = y;
+			
+			arena.addSprite(sprite);
+		} catch(Exception ex) {
+			System.out.println("Error opening car sprite, drawing one instead");
+			
+			parts[0] = new Rectangle(-20, -20, 10, 20, WHEEL_COLOUR);
+			parts[1] = new Rectangle(-20, 20, 10, 20, WHEEL_COLOUR);
+			parts[2] = new Rectangle(20, -20, 10, 20, WHEEL_COLOUR);
+			parts[3] = new Rectangle(20, 20, 10, 20, WHEEL_COLOUR);
+			parts[4] = new Rectangle(0, 0, 40, 70, CAR_COLOUR);
+			parts[5] = new Rectangle(-15, -31, 5, 5, "WHITE");
+			parts[6] = new Rectangle(15, -31, 5, 5, "WHITE");
 
+			arena = a;
+			this.setXPosition(x);
+			this.setYPosition(y);
+
+			for (int i=0; i < parts.length; i++)
+				arena.addRectangle(parts[i]);
+			spriteActive = false;
+		}
+	}
+	
     /**
      * Changes the position of this car to the given location
      *
@@ -48,12 +100,16 @@ public class Car
      */
     public void setXPosition(double x)
     {
-        double dx = x - xPosition;
+		if(spriteActive){
+			sprite.setXPosition(x);
+		} else {
+			double dx = x - xPosition;
 
-        for (int i=0; i < parts.length; i++)
-            parts[i].setXPosition(parts[i].getXPosition() + dx);
-
-        xPosition = x;
+			for (int i=0; i < parts.length; i++)
+				parts[i].setXPosition(parts[i].getXPosition() + dx);
+		}
+		
+		xPosition = x;
     }
 
     /**
@@ -63,11 +119,15 @@ public class Car
      */
     public void setYPosition(double y)
     {
-        double dy = y - yPosition;
-        for (int i=0; i < parts.length; i++)
-            parts[i].setYPosition(parts[i].getYPosition() + dy);
-
-        yPosition = y;
+		if(spriteActive){
+			sprite.setYPosition(y);
+		} else {
+			double dy = y - yPosition;
+			for (int i=0; i < parts.length; i++)
+				parts[i].setYPosition(parts[i].getYPosition() + dy);
+		}
+		
+		yPosition = y;
     }
 
     /**
@@ -109,7 +169,18 @@ public class Car
     {
         ySpeed = s;
     }
+	
+	public double getWidth(){
+		return width;
+	}
 
+	public double getHeight(){
+		return height;
+	}
+	
+	public Image getSprite(){
+		return sprite;
+	}
     /**
      * Updates the position of this car by a small amount, depending upon its speed.
      * see setXSpeed() and setYSpeed() methods.
@@ -130,12 +201,18 @@ public class Car
     {
         Rectangle[] roadParts = s.getParts();
 
-        for (int i=0; i < parts.length; i++)
-            for (int j=0; j < roadParts.length; j++)
-                if(parts[i].isTouching(roadParts[j]))
-                    return true;
-
+		if(spriteActive){
+			for(int i=0; i < roadParts.length; i++)
+				if(sprite.isTouching(roadParts[i])){
+					return true;
+				}
+		} else {
+			for (int i=0; i < parts.length; i++)
+				for (int j=0; j < roadParts.length; j++)
+					if(parts[i].isTouching(roadParts[j]))
+						return true;
+		}
+		
         return false;
-
     }
 }
