@@ -20,13 +20,14 @@ import java.awt.event.WindowEvent;
 /**
  * This class provides a simple window in which grahical objects can be drawn. 
  *
- * Instances of the Ball and Rectangle classes can be added to an instance of this class to
- * draw and animate simple shapes on the screen. 
+ * Instances of the Ball, Rectangle and Sprite classes can be added to an instance of this class to
+ * draw and animate simple shapes and images on the screen. 
  *
  * @see Ball
  * @see Rectangle
+ * @see Sprite
  *
- * @author Joe Finney
+ * @author Joe Finney (eddited by Stoyan Stoyanov)
  */
 public class GameArena 
 {
@@ -58,6 +59,7 @@ public class GameArena
     private List<Object> removeList = new ArrayList<Object>();
     private Map<Ball, javafx.scene.shape.Circle> balls = new HashMap<>();
     private Map<Rectangle, javafx.scene.shape.Rectangle> rectangles = new HashMap<>();
+	private Map<Car, javafx.scene.image.ImageView> cars = new HashMap<>();
     private int objectCount;
 
     // Basic button state
@@ -233,6 +235,15 @@ public class GameArena
 
                 rectangles.remove(r);
             }
+			
+			if (o instanceof Car)
+			{
+				Car c = (Car) o;
+				javafx.scene.image.ImageView sprite = cars.get(c);
+				root.getChildren().remove(sprite);
+				
+				cars.remove(c);
+			}
         }
 
         removeList.clear();
@@ -255,6 +266,14 @@ public class GameArena
                 root.getChildren().add(rectangle);
                 rectangles.put(r, rectangle);
             }
+			
+			if (o instanceof Car)
+			{
+				Car c = (Car) o;
+				javafx.scene.image.ImageView sprite = new javafx.scene.image.ImageView(c.getSprite());
+				root.getChildren().add(sprite);
+				cars.put(c, sprite);
+			}
         }
 
         addList.clear();
@@ -280,6 +299,17 @@ public class GameArena
             rectangle.setTranslateY(r.getYPosition() - r.getHeight()/2);
             rectangle.setFill(getColourFromString(r.getColour()));
         }
+		
+		for(Map.Entry<Car, javafx.scene.image.ImageView> entry: cars.entrySet())
+		{
+			Car c = entry.getKey();
+			javafx.scene.image.ImageView sprite = entry.getValue();
+			sprite.setFitWidth(c.getWidth());
+			sprite.setFitHeight(c.getHeight());
+			sprite.setX(c.getXPosition() - c.getWidth()/2);
+			sprite.setY(c.getYPosition() - c.getHeight()/2);
+			sprite.setImage(c.getSprite());
+		}
 
         renderLock.unlock();
     }
@@ -360,7 +390,7 @@ public class GameArena
                 System.exit(0);
 			}
 
-            // Add this ball to the draw list. Initially, with a null JavaFX entry, which we'll fill in later to avoid cross-thread operations...
+            // Add this rectangle to the draw list. Initially, with a null JavaFX entry, which we'll fill in later to avoid cross-thread operations...
             removeList.remove(r);
             addList.add(r);
             objectCount++;
@@ -383,6 +413,51 @@ public class GameArena
 		}
 	}
 
+		/**
+	 * Adds a given Car to the GameArena. 
+	 * Once a Car is added, it will automatically appear on the window. 
+	 *
+	 * @param c the car to add to the GameArena.
+	 */
+	public void addCar(Car c)
+	{
+		synchronized (this)
+		{
+			if (objectCount > MAXIMUM_OBJECTS)
+			{
+				System.out.println("\n\n");
+				System.out.println(" ********************************************************* ");
+				System.out.println(" ***** Only 100000 Objects Supported per Game Arena! ***** ");
+				System.out.println(" ********************************************************* ");
+				System.out.println("\n");
+				System.out.println("-- Joe\n\n");
+
+                System.exit(0);
+			}
+
+            // Add this car to the draw list. Initially, with a null JavaFX entry, which we'll fill in later to avoid cross-thread operations...
+            removeList.remove(c);
+            addList.add(c);
+            objectCount++;
+		}
+	}
+
+	/**
+	 * Remove a Car from the GameArena. 
+	 * Once a Car is removed, it will no longer appear on the window. 
+	 *
+	 * @param r the rectangle to remove from the GameArena.
+	 */
+	public void removeCar(Car c)
+	{
+		synchronized (this)
+		{
+            addList.remove(c);
+            removeList.add(c);
+            objectCount--;
+		}
+	}
+	
 	/**
 	 * Pause for a 1/50 of a second. 
 	 * This method causes your program to delay for 1/50th of a second. You'll find this useful if you're trying to animate your application.
