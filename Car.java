@@ -1,3 +1,5 @@
+import javafx.scene.image.Image;
+
 /**
  * Models a simple Car for the game Racer.
  *
@@ -15,6 +17,7 @@ public class Car
 
     private double xSpeed;
     private double ySpeed;
+	private Image sprite;
 
     /**
      * Creates a new Car, at the given location.
@@ -40,7 +43,21 @@ public class Car
         for (int i=0; i < parts.length; i++)
             arena.addRectangle(parts[i]);
     }
-
+	
+	public Car(Image sprite, double x, double y, double w, double h, GameArena a){
+		parts[0] = new Rectangle(10, 30, 10, 20, WHEEL_COLOUR);
+        parts[1] = new Rectangle(10, 70, 10, 20, WHEEL_COLOUR);
+        parts[2] = new Rectangle(50, 30, 10, 20, WHEEL_COLOUR);
+        parts[3] = new Rectangle(50, 70, 10, 20, WHEEL_COLOUR);
+        parts[4] = new Rectangle(30, 50, 40, 70, CAR_COLOUR);
+        parts[5] = new Rectangle(15, 19, 5, 5, "WHITE");
+        parts[6] = new Rectangle(45, 19, 5, 5, "WHITE");
+		
+		arena = a;
+		this.setXPosition(x);
+		this.setYPosition(y);
+		this.sprite = sprite;
+	}
     /**
      * Changes the position of this car to the given location
      *
@@ -109,7 +126,20 @@ public class Car
     {
         ySpeed = s;
     }
+	
+	public double getWidth(){
+		double width = (parts[2].getXPosition() + parts[2].getWidth()/2) - (parts[0].getXPosition() + parts[0].getWidth()/2);
+		return width;
+	}
 
+	public double getHeight(){
+		double height = parts[4].getHeight();
+		return height;
+	}
+	
+	public Image getSprite(){
+		return sprite;
+	}
     /**
      * Updates the position of this car by a small amount, depending upon its speed.
      * see setXSpeed() and setYSpeed() methods.

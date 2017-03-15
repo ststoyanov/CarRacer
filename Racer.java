@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javafx.scene.image.Image;
 /**
  * uses the GameArena APIs to implement a simple top down racing game.
  *
@@ -52,6 +53,7 @@ public class Racer
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
 	private double randProb = 0; // random probability variable
+	private Image carSprite;
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -89,8 +91,9 @@ public class Racer
         if(!playing)
         {
             // Create the player's car
-            player = new Car(SCREEN_WIDTH/2 - 30, SCREEN_HEIGHT - 150, arena);
-
+            player = new Car(new Image("res/car.png"),SCREEN_WIDTH/2 - 30, SCREEN_HEIGHT - 150, 1,1, arena);
+			arena.addCar(player);
+			
 			currentRoadX = SCREEN_WIDTH/2;
 			
             // Create the initial road layout
