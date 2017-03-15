@@ -98,7 +98,7 @@ public class Racer
             {
                 road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT, arena);
                 road[s].setYPosition(s*ROAD_SEGMENT_HEIGHT);
-				road[s].setYSpeed(speed);
+				road[s].setYSpeed(INITIAL_SPEED);
             }
 			
 			curveDirection = 1;
