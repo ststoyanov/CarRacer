@@ -1,5 +1,3 @@
-import javafx.scene.image.Image;
-
 /**
  * Models a simple Car for the game Racer.
  *
@@ -170,17 +168,22 @@ public class Car
         ySpeed = s;
     }
 	
+	/**
+	 * Gets the width of the Car.
+	 * @return width Car width
+	 */
 	public double getWidth(){
 		return width;
 	}
 
+	/**
+	 * Gets the height of the Car.
+	 * @return height Car height
+	 */
 	public double getHeight(){
 		return height;
 	}
-	
-	public Image getSprite(){
-		return sprite;
-	}
+
     /**
      * Updates the position of this car by a small amount, depending upon its speed.
      * see setXSpeed() and setYSpeed() methods.

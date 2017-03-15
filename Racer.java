@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javafx.scene.image.Image;
 /**
  * uses the GameArena APIs to implement a simple top down racing game.
  *
@@ -53,7 +52,6 @@ public class Racer
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
 	private double randProb = 0; // random probability variable
-	private Image carSprite;
 
     /**
      * Creates a new instance of the Racer racing game.
