@@ -25,13 +25,13 @@ public class Car
      */
     public Car(double x, double y, GameArena a)
     {
-        parts[0] = new Rectangle(10, 20, 10, 20, WHEEL_COLOUR);
-        parts[1] = new Rectangle(10, 80, 10, 20, WHEEL_COLOUR);
-        parts[2] = new Rectangle(50, 20, 10, 20, WHEEL_COLOUR);
-        parts[3] = new Rectangle(50, 80, 10, 20, WHEEL_COLOUR);
+        parts[0] = new Rectangle(10, 30, 10, 20, WHEEL_COLOUR);
+        parts[1] = new Rectangle(10, 70, 10, 20, WHEEL_COLOUR);
+        parts[2] = new Rectangle(50, 30, 10, 20, WHEEL_COLOUR);
+        parts[3] = new Rectangle(50, 70, 10, 20, WHEEL_COLOUR);
         parts[4] = new Rectangle(30, 50, 40, 70, CAR_COLOUR);
-        parts[5] = new Rectangle(15, 18, 5, 5, "WHITE");
-        parts[6] = new Rectangle(45, 18, 5, 5, "WHITE");
+        parts[5] = new Rectangle(15, 19, 5, 5, "WHITE");
+        parts[6] = new Rectangle(45, 19, 5, 5, "WHITE");
 
         arena = a;
         this.setXPosition(x);
