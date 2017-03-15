@@ -26,7 +26,7 @@ public class GameWindow
 	public GameWindow(){
 		window = new JFrame();
         window.setTitle("Racer");
-		
+		window.setIconImage(new ImageIcon(getClass().getResource("res/icon.png")).getImage());
 		//create content
 		mainPanel = new JPanel();
 		buttonPanel = new JPanel();
