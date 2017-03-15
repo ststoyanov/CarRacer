@@ -59,7 +59,7 @@ public class GameArena
     private List<Object> removeList = new ArrayList<Object>();
     private Map<Ball, javafx.scene.shape.Circle> balls = new HashMap<>();
     private Map<Rectangle, javafx.scene.shape.Rectangle> rectangles = new HashMap<>();
-	private Map<Car, javafx.scene.image.ImageView> cars = new HashMap<>();
+	private Map<Sprite, javafx.scene.image.ImageView> sprites = new HashMap<>();
     private int objectCount;
 
     // Basic button state
@@ -236,13 +236,13 @@ public class GameArena
                 rectangles.remove(r);
             }
 			
-			if (o instanceof Car)
+			if (o instanceof Sprite)
 			{
-				Car c = (Car) o;
-				javafx.scene.image.ImageView sprite = cars.get(c);
+				Sprite s = (Sprite) o;
+				javafx.scene.image.ImageView sprite = sprites.get(s);
 				root.getChildren().remove(sprite);
 				
-				cars.remove(c);
+				sprites.remove(s);
 			}
         }
 
@@ -267,12 +267,12 @@ public class GameArena
                 rectangles.put(r, rectangle);
             }
 			
-			if (o instanceof Car)
+			if (o instanceof Sprite)
 			{
-				Car c = (Car) o;
-				javafx.scene.image.ImageView sprite = new javafx.scene.image.ImageView(c.getSprite());
+				Sprite s = (Sprite) o;
+				javafx.scene.image.ImageView sprite = new javafx.scene.image.ImageView(s);
 				root.getChildren().add(sprite);
-				cars.put(c, sprite);
+				sprites.put(s, sprite);
 			}
         }
 
@@ -300,15 +300,15 @@ public class GameArena
             rectangle.setFill(getColourFromString(r.getColour()));
         }
 		
-		for(Map.Entry<Car, javafx.scene.image.ImageView> entry: cars.entrySet())
+		for(Map.Entry<Sprite, javafx.scene.image.ImageView> entry: sprites.entrySet())
 		{
-			Car c = entry.getKey();
+			Sprite s = entry.getKey();
 			javafx.scene.image.ImageView sprite = entry.getValue();
-			sprite.setFitWidth(c.getWidth());
-			sprite.setFitHeight(c.getHeight());
-			sprite.setX(c.getXPosition() - c.getWidth()/2);
-			sprite.setY(c.getYPosition() - c.getHeight()/2);
-			sprite.setImage(c.getSprite());
+			sprite.setFitWidth(s.getCurrentWidth());
+			sprite.setFitHeight(s.getCurrentHeight());
+			sprite.setX(s.getXPosition() - s.getCurrentWidth()/2);
+			sprite.setY(s.getYPosition() - s.getCurrentHeight()/2);
+			sprite.setImage(s);
 		}
 
         renderLock.unlock();
@@ -413,13 +413,13 @@ public class GameArena
 		}
 	}
 
-		/**
-	 * Adds a given Car to the GameArena. 
-	 * Once a Car is added, it will automatically appear on the window. 
+	/**
+	 * Adds a given Sprite to the GameArena. 
+	 * Once a Sprite is added, it will automatically appear on the window. 
 	 *
-	 * @param c the car to add to the GameArena.
+	 * @param s the sprite to add to the GameArena.
 	 */
-	public void addCar(Car c)
+	public void addSprite(Sprite s)
 	{
 		synchronized (this)
 		{
@@ -435,25 +435,25 @@ public class GameArena
                 System.exit(0);
 			}
 
-            // Add this car to the draw list. Initially, with a null JavaFX entry, which we'll fill in later to avoid cross-thread operations...
-            removeList.remove(c);
-            addList.add(c);
+            // Add this sprite to the draw list. Initially, with a null JavaFX entry, which we'll fill in later to avoid cross-thread operations...
+            removeList.remove(s);
+            addList.add(s);
             objectCount++;
 		}
 	}
 
 	/**
-	 * Remove a Car from the GameArena. 
-	 * Once a Car is removed, it will no longer appear on the window. 
+	 * Remove a Sprite from the GameArena. 
+	 * Once a Sprite is removed, it will no longer appear on the window. 
 	 *
-	 * @param r the rectangle to remove from the GameArena.
+	 * @param s the sprite to remove from the GameArena.
 	 */
-	public void removeCar(Car c)
+	public void removeSprite(Sprite s)
 	{
 		synchronized (this)
 		{
-            addList.remove(c);
-            removeList.add(c);
+            addList.remove(s);
+            removeList.add(s);
             objectCount--;
 		}
 	}

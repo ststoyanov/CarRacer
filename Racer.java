@@ -32,7 +32,7 @@ import javafx.scene.image.Image;
  */
 public class Racer 
 {
-    public static final double PLAYER_SPEED = 5;
+    public static final double PLAYER_SPEED = 2.5;
     public static final int ROAD_SEGMENT_WIDTH = 180;
     public static final int ROAD_SEGMENT_HEIGHT = 4;
     public static final int ROAD_CURVE_SPEED = 2;
@@ -91,8 +91,7 @@ public class Racer
         if(!playing)
         {
             // Create the player's car
-            player = new Car(new Image("res/car.png"),SCREEN_WIDTH/2 - 30, SCREEN_HEIGHT - 150, 1,1, arena);
-			arena.addCar(player);
+            player = new Car("res/car.png",SCREEN_WIDTH/2, SCREEN_HEIGHT - 100, 40,70, arena);
 			
 			currentRoadX = SCREEN_WIDTH/2;
 			
