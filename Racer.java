@@ -32,20 +32,22 @@ import javax.swing.*;
 public class Racer 
 {
     public static final double PLAYER_SPEED = 5;
-    public static final int ROAD_SEGMENT_WIDTH = 160;
+    public static final int ROAD_SEGMENT_WIDTH = 180;
     public static final int ROAD_SEGMENT_HEIGHT = 4;
     public static final int ROAD_CURVE_SPEED = 2;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 	public static final int ROAD_LEFT_BOUND = 300;
 	public static final int ROAD_RIGHT_BOUND = 600;
+	public static final double INITIAL_SPEED = 1.0;
+	public static final int LEVEL_UP_SCORE = 500;
 
     private GameArena arena;
     private Car player;
     private RoadSegment[] road = new RoadSegment[SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT + 1];
 
     private double currentRoadX = SCREEN_WIDTH/2;
-    private double speed = 2.0;
+    private double speed = INITIAL_SPEED;
     private boolean playing = false;
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
@@ -99,6 +101,8 @@ public class Racer
 				road[s].setYSpeed(speed);
             }
 			
+			curveDirection = 1;
+			speed = INITIAL_SPEED;
             score = 0;
             playing = true;
         }
@@ -156,6 +160,11 @@ public class Racer
 
             // Recycle any segments that have crolled off screen...
             recycleRoadSegments();
+			
+			//every  point speed up the game
+			if(score%LEVEL_UP_SCORE == 0){
+				speedUp();
+			}
 
             if (hasCrashed())
                 stop();
@@ -223,6 +232,26 @@ public class Racer
 
         return false;
     }
+	
+	/**
+	 * Speeds up the game by a given value.
+	 *
+	 * @param up speed up by that much.
+	 */
+	private void speedUp(int up){
+		speed += up;
+		for(int i=0; i<road.length; i++)
+		{
+			road[i].setYSpeed(speed);
+		}
+	}
+	
+	/**
+	 * Speeds up the game by 1.
+	 */
+	private void speedUp(){
+		speedUp(1);
+	}
 
     /**
      * A simple example of usage
