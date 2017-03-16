@@ -78,17 +78,17 @@ public class HighScoresDialog{
 		mainPanel.setPreferredSize(new Dimension(160,185));
 		
 		JPanel placePanel = new JPanel();
-		placePanel.setLayout(new BoxLayout(placePanel,BoxLayout.PAGE_AXIS));
+		placePanel.setLayout(new GridLayout(11,1));
 		
 		JPanel namePanel = new JPanel();
-		namePanel.setLayout(new BoxLayout(namePanel,BoxLayout.PAGE_AXIS));
+		namePanel.setLayout(new GridLayout(11,1));
 		
 		JPanel scorePanel = new JPanel();
-		scorePanel.setLayout(new BoxLayout(scorePanel,BoxLayout.PAGE_AXIS));
+		scorePanel.setLayout(new GridLayout(11,1));
 		
 		//add the title row
 		placePanel.add(new JLabel("No."));
-		namePanel.add(new JLabel("NAME"));
+		namePanel.add(new JLabel("         NAME"));
 		scorePanel.add(new JLabel("SCORE"));
 		
 		for(int i=0; i<10; i++){
@@ -100,7 +100,7 @@ public class HighScoresDialog{
 			focus = false;
 			for(int i = 0;i < 10;i++){
 				namePanel.add(new JLabel(scores.getName(i)));
-				scorePanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 		}
 		
@@ -128,19 +128,19 @@ public class HighScoresDialog{
 			//display the scores before the new one
 			for(int i = 0;i < scorePlace;i++){
 				namePanel.add(new JLabel(scores.getName(i)));
-				scorePanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 			
 			//display the new score with a space to assign a name to it
 			newNamePanel.add(newName);
 			newNamePanel.setPreferredSize(new Dimension(100, 5));
 			namePanel.add(newNamePanel);
-			scorePanel.add(new JLabel(Integer.toString(newScore)));
+			scorePanel.add(new JLabel("  "+Integer.toString(newScore)));
 			
 			//display the scores after the new one
 			for(int i = scorePlace+1;i<10;i++){
 				namePanel.add(new JLabel(scores.getName(i)));
-				scorePanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 			
 			//when a name is typed and Enter is pressed finilize the field and save the score
