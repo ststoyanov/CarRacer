@@ -25,21 +25,25 @@ public class Car
      *
      * @param x The x position on the screen of the centre of the car.
      * @param y The y position on the screen of the centre of the car.
+	 * @param width The width of the car.
+	 * @param height the height of the car.
      * @param a The GameArena upon which to draw this car.
      */
-    public Car(double x, double y, GameArena a)
+    public Car(double x, double y, double width, double height, GameArena a)
     {
-        parts[0] = new Rectangle(10, 30, 10, 20, WHEEL_COLOUR);
-        parts[1] = new Rectangle(10, 70, 10, 20, WHEEL_COLOUR);
-        parts[2] = new Rectangle(50, 30, 10, 20, WHEEL_COLOUR);
-        parts[3] = new Rectangle(50, 70, 10, 20, WHEEL_COLOUR);
-        parts[4] = new Rectangle(30, 50, 40, 70, CAR_COLOUR);
-        parts[5] = new Rectangle(15, 19, 5, 5, "WHITE");
-        parts[6] = new Rectangle(45, 19, 5, 5, "WHITE");
+		parts[0] = new Rectangle(-width/2, -height/7, width/4, height/3.5, WHEEL_COLOUR);
+		parts[1] = new Rectangle(-width/2, height/7, width/4, height/3.5, WHEEL_COLOUR);
+		parts[2] = new Rectangle(width/2, -height/7, width/4, height/3.5, WHEEL_COLOUR);
+		parts[3] = new Rectangle(width/2, height/7, width/4, height/3.5, WHEEL_COLOUR);
+		parts[4] = new Rectangle(0, 0, width, height, CAR_COLOUR);
+		parts[5] = new Rectangle(width/8-width/2, -height/2+2, width/8, height/14, "WHITE");
+		parts[6] = new Rectangle(width/2-width/8, -height/2+2, width/8, height/14, "WHITE");
 
         arena = a;
         this.setXPosition(x);
         this.setYPosition(y);
+		this.width = width;
+		this.height = height;
 
         for (int i=0; i < parts.length; i++)
             arena.addRectangle(parts[i]);
@@ -52,20 +56,20 @@ public class Car
 	 * @param spriteURL The URL for the sprite file.
 	 * @param x The x position on the screen of the centre of the car.
      * @param y The y position on the screen of the centre of the car.
-	 * @param w The width of the car.
-	 * @param h the height of the car.
+	 * @param width The width of the car.
+	 * @param height the height of the car.
      * @param a The GameArena upon which to draw this car.
      */
-	 public Car(String spriteURL, double x, double y, double w, double h, GameArena a){
+	 public Car(String spriteURL, double x, double y, double width, double height, GameArena a){
 		// Try to open the sprite from the spriteURL.
 		// If successfull create a car with the model, if not draw one with rectangles instead.
 		try{
-			sprite = new Sprite(spriteURL, x, y, w, h);
+			sprite = new Sprite(spriteURL, x, y, width, height);
 			spriteActive = true;
 			
 			arena = a;
-			width = w;
-			height = h;
+			this.width = width;
+			this.height = height;
 			xPosition = x;
 			yPosition = y;
 			
@@ -73,17 +77,19 @@ public class Car
 		} catch(Exception ex) {
 			System.out.println("Error opening car sprite, drawing one instead");
 			
-			parts[0] = new Rectangle(-20, -20, 10, 20, WHEEL_COLOUR);
-			parts[1] = new Rectangle(-20, 20, 10, 20, WHEEL_COLOUR);
-			parts[2] = new Rectangle(20, -20, 10, 20, WHEEL_COLOUR);
-			parts[3] = new Rectangle(20, 20, 10, 20, WHEEL_COLOUR);
-			parts[4] = new Rectangle(0, 0, 40, 70, CAR_COLOUR);
-			parts[5] = new Rectangle(-15, -31, 5, 5, "WHITE");
-			parts[6] = new Rectangle(15, -31, 5, 5, "WHITE");
+			parts[0] = new Rectangle(-width/2, -height/3.5, width/4, height/3.5, WHEEL_COLOUR);
+			parts[1] = new Rectangle(-width/2, height/3.5, width/4, height/3.5, WHEEL_COLOUR);
+			parts[2] = new Rectangle(width/2, -height/3.5, width/4, height/3.5, WHEEL_COLOUR);
+			parts[3] = new Rectangle(width/2, height/3.5, width/4, height/3.5, WHEEL_COLOUR);
+			parts[4] = new Rectangle(0, 0, width, height, CAR_COLOUR);
+			parts[5] = new Rectangle(width/8-width/2, -height/2+4, width/8, height/14, "WHITE");
+			parts[6] = new Rectangle(width/2-width/8, -height/2+4, width/8, height/14, "WHITE");
 
 			arena = a;
 			this.setXPosition(x);
 			this.setYPosition(y);
+			this.width = width;
+			this.height = height;
 
 			for (int i=0; i < parts.length; i++)
 				arena.addRectangle(parts[i]);
