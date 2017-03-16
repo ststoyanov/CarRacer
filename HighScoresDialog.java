@@ -72,10 +72,11 @@ public class HighScoresDialog{
 	 * @param newScore the new high score
 	 */
 	private void createPanel(int newScore){
+		JPanel namePanel = new JPanel(new GridLayout(10,1));
+		JPanel scorePanel = new JPanel(new GridLayout(10,1));
 		//set up the panel and it's layout
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(10,2));
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+		mainPanel.setLayout(new GridBagLayout());
 		mainPanel.setPreferredSize(new Dimension(180,160));
 		JLabel label;
 		//if no new score, show the current top 10
@@ -84,11 +85,13 @@ public class HighScoresDialog{
 			for(int i = 0;i < 10;i++){
 				label = new JLabel(scores.getName(i));
 				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				mainPanel.add(label);
+				namePanel.add(label);
 				label = new JLabel(Integer.toString(scores.getScore(i)));
 				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				mainPanel.add(label);
+				scorePanel.add(label);
 			}
+			mainPanel.add(namePanel);
+			mainPanel.add(scorePanel);
 		}
 		
 		//if there is a new score add it and let the user add his name to it
