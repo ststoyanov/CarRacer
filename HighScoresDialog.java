@@ -75,14 +75,19 @@ public class HighScoresDialog{
 		//set up the panel and it's layout
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(10,2));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 		mainPanel.setPreferredSize(new Dimension(180,160));
-		
+		JLabel label;
 		//if no new score, show the current top 10
 		if(newScore <= 0){
 			focus = false;
 			for(int i = 0;i < 10;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				label = new JLabel(scores.getName(i));
+				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				mainPanel.add(label);
+				label = new JLabel(Integer.toString(scores.getScore(i)));
+				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				mainPanel.add(label);
 			}
 		}
 		
@@ -107,8 +112,10 @@ public class HighScoresDialog{
 
 			//display the scores before the new one
 			for(int i = 0;i < scorePlace;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				label = new JLabel(scores.getName(i));
+				mainPanel.add(label);
+				label = new JLabel(Integer.toString(scores.getScore(i)));
+				mainPanel.add(label);
 			}
 			
 			//display the new score with a space to assign a name to it
@@ -117,8 +124,10 @@ public class HighScoresDialog{
 			
 			//display the scores after the new one
 			for(int i = scorePlace+1;i<10;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				label = new JLabel(scores.getName(i));
+				mainPanel.add(label);
+				label = new JLabel(Integer.toString(scores.getScore(i)));
+				mainPanel.add(label);
 			}
 			
 			//when a name is typed and Enter is pressed finilize the field and save the score
