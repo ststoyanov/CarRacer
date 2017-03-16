@@ -72,17 +72,35 @@ public class HighScoresDialog{
 	 * @param newScore the new high score
 	 */
 	private void createPanel(int newScore){
-		//set up the panel and it's layout
+		//set up the panels and their layouts
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(10,2));
-		mainPanel.setPreferredSize(new Dimension(180,160));
+		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.LINE_AXIS));
+		mainPanel.setPreferredSize(new Dimension(160,185));
+		
+		JPanel placePanel = new JPanel();
+		placePanel.setLayout(new GridLayout(11,1));
+		
+		JPanel namePanel = new JPanel();
+		namePanel.setLayout(new GridLayout(11,1));
+		
+		JPanel scorePanel = new JPanel();
+		scorePanel.setLayout(new GridLayout(11,1));
+		
+		//add the title row
+		placePanel.add(new JLabel("No."));
+		namePanel.add(new JLabel("         NAME"));
+		scorePanel.add(new JLabel("SCORE"));
+		
+		for(int i=0; i<10; i++){
+			placePanel.add(new JLabel(Integer.toString(i+1)+"."));
+		}
 		
 		//if no new score, show the current top 10
 		if(newScore <= 0){
 			focus = false;
 			for(int i = 0;i < 10;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				namePanel.add(new JLabel(scores.getName(i)));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 		}
 		
@@ -90,7 +108,9 @@ public class HighScoresDialog{
 		else{
 			focus = true;
 			queuedScore = newScore;
-			newName = new JTextField();
+			JPanel newNamePanel = new JPanel();
+			newNamePanel.setLayout(new BoxLayout(newNamePanel,BoxLayout.LINE_AXIS));
+			newName = new JTextField(9);
 			((AbstractDocument) newName.getDocument()).setDocumentFilter(new CustomDocumentFilter());
 			newName.requestFocusInWindow();
 			
@@ -107,18 +127,20 @@ public class HighScoresDialog{
 
 			//display the scores before the new one
 			for(int i = 0;i < scorePlace;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				namePanel.add(new JLabel(scores.getName(i)));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 			
 			//display the new score with a space to assign a name to it
-			mainPanel.add(newName);
-			mainPanel.add(new JLabel(Integer.toString(newScore)));
+			newNamePanel.add(newName);
+			newNamePanel.setPreferredSize(new Dimension(100, 5));
+			namePanel.add(newNamePanel);
+			scorePanel.add(new JLabel("  "+Integer.toString(newScore)));
 			
 			//display the scores after the new one
 			for(int i = scorePlace+1;i<10;i++){
-				mainPanel.add(new JLabel(scores.getName(i)));
-				mainPanel.add(new JLabel(Integer.toString(scores.getScore(i))));
+				namePanel.add(new JLabel(scores.getName(i)));
+				scorePanel.add(new JLabel("  "+Integer.toString(scores.getScore(i))));
 			}
 			
 			//when a name is typed and Enter is pressed finilize the field and save the score
@@ -128,15 +150,24 @@ public class HighScoresDialog{
 					if(!newName.getText().isEmpty()){
 						scores.setHighScore(scorePlace,newName.getText(),newScore);
 						queuedScore = -1;
-						mainPanel.remove(newName);
-						mainPanel.add(new JLabel(scores.getName(scorePlace)),scorePlace*2);
-						mainPanel.revalidate();
-						mainPanel.repaint();
+						newNamePanel.remove(newName);
+						newNamePanel.add(new JLabel(scores.getName(scorePlace)));
+						newNamePanel.revalidate();
+						newNamePanel.repaint();
 						dialog.getParent().requestFocus();
 					}
 				}
 			});
 		}
+		
+		//add the objects to the mainPanel and shape it
+		mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		mainPanel.add(placePanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(3, 0)));
+		mainPanel.add(namePanel);
+		mainPanel.add(Box.createHorizontalGlue());
+		mainPanel.add(scorePanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 	}
 	
 	
