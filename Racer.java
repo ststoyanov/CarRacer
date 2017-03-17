@@ -32,14 +32,14 @@ import javax.swing.*;
 public class Racer 
 {
     public static final double PLAYER_SPEED = 2.5;
-    public static final int ROAD_SEGMENT_WIDTH = 180;
+    public static final int ROAD_SEGMENT_WIDTH = 200;
     public static final int ROAD_SEGMENT_HEIGHT = 4;
     public static final int ROAD_CURVE_SPEED = 2;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 	public static final int ROAD_LEFT_BOUND = 300;
 	public static final int ROAD_RIGHT_BOUND = 600;
-	public static final double INITIAL_SPEED = 1.0;
+	public static final double INITIAL_SPEED = 1.5;
 	public static final int LEVEL_UP_SCORE = 500;
 
     private GameArena arena;
@@ -51,7 +51,7 @@ public class Racer
     private boolean playing = false;
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
-	private double randProb = 0; // random probability variable
+	private double randProb = 0; // variable for controling the probability of random event
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -96,7 +96,7 @@ public class Racer
             // Create the initial road layout
             for (int s = road.length-1; s >= 0 ; s--)
             {
-                road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT, arena);
+                road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.25, arena);
                 road[s].setYPosition(s*ROAD_SEGMENT_HEIGHT);
 				road[s].setYSpeed(INITIAL_SPEED);
             }
@@ -140,14 +140,17 @@ public class Racer
     {
         if(playing)
         {
-            score++;
+			score++;
+			
+			if(score%500 == 0)
+				speedUp();
 
             double speed = 0;
             if (arena.leftPressed())
-                speed -= PLAYER_SPEED;
+                speed -= PLAYER_SPEED + this.speed/5;
 
             if (arena.rightPressed())
-                speed += PLAYER_SPEED;
+                speed += PLAYER_SPEED + this.speed/5;
 
             player.setXSpeed(speed);
 
@@ -160,11 +163,6 @@ public class Racer
 
             // Recycle any segments that have crolled off screen...
             recycleRoadSegments();
-			
-			//every  point speed up the game
-			if(score%LEVEL_UP_SCORE == 0){
-				speedUp();
-			}
 
             if (hasCrashed())
                 stop();
@@ -195,7 +193,7 @@ public class Racer
 		}
 		
         currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
-        RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT, arena);
+        RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.25, arena);
         s.setYSpeed(speed);
         return s;
     }
@@ -238,7 +236,7 @@ public class Racer
 	 *
 	 * @param up speed up by that much.
 	 */
-	private void speedUp(int up){
+	private void speedUp(double up){
 		speed += up;
 		for(int i=0; i<road.length; i++)
 		{
@@ -247,10 +245,10 @@ public class Racer
 	}
 	
 	/**
-	 * Speeds up the game by 1.
+	 * Speeds up the game by 0.5.
 	 */
 	private void speedUp(){
-		speedUp(1);
+		speedUp(0.5);
 	}
 
     /**
