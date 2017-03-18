@@ -10,7 +10,7 @@ public class MenuWindow
 	private JPanel mainPanel;
 	JButton speedRun;
 	
-	public MenuWindow(GameWindow window){
+	public MenuWindow(MainWindow window){
 		mainPanel = new JPanel();
 		speedRun = new JButton("SPEED RUN");
 		speedRun.addActionListener(new ActionListener(){
