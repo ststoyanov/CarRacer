@@ -58,7 +58,8 @@ public class Racer
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
 	private double randProb = 0; // variable for controling the probability of random event
-	private int currentMode = 0;
+	private int gameMode = 0;
+	public int coins = 0;
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -89,13 +90,16 @@ public class Racer
     }
 
     /**
-     * Starts a new game, if the game is not alreayd running.
+     * Starts a new game in a chosen game mode, if the game is not alreayd running.
+	 *
+	 * @param gameMode the game mode to be started (Racer.SPEED_RUN or Racer.CLASSIC).
      */
-    public void start(int game)
+    public void start(int gameMode)
     {
         if(!playing)
         {
-			currentMode = game;
+			//set the game mode
+			this.gameMode = gameMode;
 			
             // Create the player's car
             player = new Car("res/car.png",SCREEN_WIDTH/2, SCREEN_HEIGHT - 100, 40,70, arena);
@@ -110,6 +114,7 @@ public class Racer
 				road[s].setYSpeed(INITIAL_SPEED);
             }
 			
+			//reset game variables
 			curveDirection = 1;
 			speed = INITIAL_SPEED;
             score = 0;
@@ -150,7 +155,9 @@ public class Racer
         if(playing)
         {
 			score++;
-			if(currentMode == SPEED_RUN){
+			
+			//depending on the game mode control the difficulty 
+			if(gameMode == SPEED_RUN){
 				if(score%500 == 0)
 					speedUp();
 			} else {
@@ -158,6 +165,7 @@ public class Racer
 					speedUp();
 			}
 
+			//move the car left or right
             double speed = 0;
             if (arena.leftPressed())
                 speed -= PLAYER_SPEED + this.speed/5;
@@ -168,6 +176,8 @@ public class Racer
             player.setXSpeed(speed);
 
             player.move();
+			
+			//go forward
             for (int i=0; i<road.length; i++)
             {
                 if (road[i] != null)
@@ -192,7 +202,8 @@ public class Racer
      */
     private RoadSegment nextRoadSegment()
     {
-		if(currentMode == SPEED_RUN){
+		//depending on game mode create an according road segment
+		if(gameMode == SPEED_RUN){
 			//checks if the road is out of bounds and if so changes the direction
 			//also randomly changes the direction with increasing chance the longer it hasn't changed
 			if(currentRoadX <= ROAD_LEFT_BOUND || currentRoadX >= ROAD_RIGHT_BOUND || Math.random() < randProb){
@@ -207,18 +218,23 @@ public class Racer
 			}
 			
 			currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
-		} else {
+		} else if(gameMode == CLASSIC) {
+			//add obstacles on random intervals
 			if(Math.random() < randProb){
 					obstFlag = true;
 					randProb = -0.5;
 			}
 			randProb += 0.01;
 		}
+		
         RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.5, arena);
+		
+		//add random obstacle if needed
 		if(obstFlag){
-			s.addObstacle((int)Math.round(Math.random()));
+			s.addObstacle((int)(Math.round(Math.random()*4)%4));
 			obstFlag = false;
 		}
+		
         s.setYSpeed(speed);
         return s;
     }
@@ -276,11 +292,11 @@ public class Racer
 		speedUp(0.5);
 	}
 
-   /* /**
+  /**
      * A simple example of usage
      *
      * @param args unused.
-     *//*
+     */
     public static void main(String[] args)
     {
         JFrame window = new JFrame();
@@ -291,9 +307,9 @@ public class Racer
         window.setContentPane(r.getPanel());
         window.setVisible(true);
 
-        r.start();
+        r.start(SPEED_RUN);
 
         while(r.isPlaying())
             r.update();
-    }*/
+    }
 }

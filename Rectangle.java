@@ -114,6 +114,15 @@ public class Rectangle
 		this.colour = input;
 	}
 
+	/**
+	 * Create a rectangle with the given parameters.
+	 *
+	 * @param x the rectangle's x position
+	 * @param y the rectangle's y position
+	 * @param w the rectangle's width
+	 * @param h the rectangle's height
+ 	 * @param col the rectangle's color
+	 */
 	public Rectangle(double x, double y, double w, double h, String col)
 	{
 		xPosition = x;
@@ -123,6 +132,12 @@ public class Rectangle
 		colour = col;
 	}	
 
+	/**
+     * Determines if this rectangle is touching another one.
+     *
+     * @param r The rectangle to test against.
+     * @return true of this rectangle is touching the other one, false otherwise.
+     */
     public boolean isTouching(Rectangle r)
     {
         return (xPosition - width/2 < r.getXPosition() + r.getWidth()/2 &&		
@@ -130,6 +145,19 @@ public class Rectangle
                 yPosition - height/2 < r.getYPosition() + r.getHeight()/2 &&
                 yPosition + height/2 > r.getYPosition() - r.getHeight()/2);
     }
-
+	
+	/**
+     * Determines if this rectangle is touching the given Ball.
+     *
+     * @param Ball the ball to test agains.
+     * @return true of this rectangle is touching the given ball, false otherwise.
+     */
+	public boolean isTouching(Ball b)
+    {
+        return (xPosition - width/2 < b.getXPosition() + b.getSize()/2 &&		
+                xPosition + width/2 > b.getXPosition() - b.getSize()/2 &&
+                yPosition - height/2 < b.getYPosition() + b.getSize()/2 &&
+                yPosition + height/2 > b.getYPosition() - b.getSize()/2);
+    }
 
 }

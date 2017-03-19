@@ -169,20 +169,29 @@ public class RoadSegment
 		}
     }
 	
+	/**
+	 * Adds an obstacle to the road slice.
+	 *
+	 * @param type the type of the obstacle (there are 4 types of obstacles .-. , -.- , --. , ..-)
+	 */
 	public void addObstacle(int type){
 		switch(type){
 			case 0:
+				obstacles.add(new Rectangle(xPosition, yPosition, width/3, height*2, KERB_COLOUR));
+				break;
+			case 1:
 				obstacles.add(new Rectangle(xPosition-width/3, yPosition, width/3, height*2, KERB_COLOUR));
 				obstacles.add(new Rectangle(xPosition+width/3, yPosition, width/3, height*2, KERB_COLOUR));
 				break;
-			case 1:
-				obstacles.add(new Rectangle(xPosition, yPosition, width/3, height*2, KERB_COLOUR));
+			case 2:
+				obstacles.add(new Rectangle(xPosition-width/6, yPosition, width*2/3, height*2, KERB_COLOUR));
+				break;
+			case 3:
+				obstacles.add(new Rectangle(xPosition+width/6, yPosition, width*2/3, height*2, KERB_COLOUR));
 				break;
 		}
 		for(Rectangle obst : obstacles){
 			arena.addRectangle(obst);
 		}
-		System.out.println(obstacles.size());
-		
 	}
 }

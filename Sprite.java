@@ -112,6 +112,14 @@ public class Sprite extends Image
                 yPosition - height/2 < r.getYPosition() + r.getHeight()/2 &&
                 yPosition + height/2 > r.getYPosition() - r.getHeight()/2);
     }
+	
+	public boolean isTouching(Ball b)
+    {
+        return (xPosition - width/2 < b.getXPosition() + b.getSize()/2 &&		
+                xPosition + width/2 > b.getXPosition() - b.getSize()/2 &&
+                yPosition - height/2 < b.getYPosition() + b.getSize()/2 &&
+                yPosition + height/2 > b.getYPosition() - b.getSize()/2);
+    }
 
 
 }

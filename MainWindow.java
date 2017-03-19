@@ -7,13 +7,9 @@ import java.awt.event.*;
  */
 public class MainWindow
 {
-	private static final int MENU_WIN	= 0;
-	private static final int SPEED_RUN  = 1;
-	
 	private JFrame window;
 	private static GameWindow game;
 	private static MenuWindow menu;
-	private static int active = MENU_WIN;
 	ImageIcon icon;
 	private static int gameMode = 0;
 	
@@ -22,19 +18,22 @@ public class MainWindow
 	 */
 	public MainWindow(){
 		window = new JFrame();
+		
+		//Add title and image to the game
         window.setTitle("Racer");
 		try{
 		icon = new ImageIcon(getClass().getResource("res/icon.png"));
 		} catch (Exception e) { 
 			System.out.println("Icon not found."); 
 		}
-		
 		if(icon != null){
 			window.setIconImage(icon.getImage());
 		}
+		
 		game = new GameWindow(this);
 		
 		openMenu();
+		
 		window.setResizable(false);
 		window.setLocation(0,0);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +48,9 @@ public class MainWindow
 		window.setTitle(name);
 	}
 	
+	/**
+	 * Set the main window to present the menu.
+	 */
 	public void openMenu(){
 		menu = new MenuWindow(this);
 		window.getRootPane().setDefaultButton(menu.getDefaultButton());
@@ -59,6 +61,9 @@ public class MainWindow
 
 	}
 	
+	/**
+	 * Set the main menu to present the game.
+	 */
 	public void openGame(int gameMode){
 		this.gameMode = gameMode;
 		

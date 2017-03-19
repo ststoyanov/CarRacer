@@ -224,4 +224,23 @@ public class Car
 		
         return false;
     }
+	
+	 /**
+     * Determines if this car is touching the given coin (of type Ball).
+     *
+     * @param coin the coin to test.
+     * @return true of this car is touching the given coin, false otherwise.
+     */
+	public boolean isTouching(Ball coin){
+		if(spriteActive){
+			if(sprite.isTouching(coin))
+				return true;
+		} else {
+			for (int i=0; i < parts.length; i++)
+				if(parts[i].isTouching(coin))
+					return true;
+		}
+		
+        return false;		
+	}
 }

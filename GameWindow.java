@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * Models the CarRacer game window.
+ * Models the CarRacer game window and controls the game.
  */
 public class GameWindow
 {
@@ -20,15 +20,22 @@ public class GameWindow
 	private JLabel highScore;
 	public volatile boolean  startGame = false;
 	private JButton defaultButton;
+	private MainWindow parent;
 	
 	/**
-	 * Constructor. Creates the game window.
+	 * Constructor.
+	 *
+	 * @param parent the parent window of the game.
 	 */
-	public GameWindow(MainWindow window){
-		createAndShowGUI(window);
+	public GameWindow(MainWindow parent){
+		this.parent = parent;
+		createAndShowGUI();
 	}
 
-	private void createAndShowGUI(MainWindow window){
+	/**
+	 * Models the GUI.
+	 */ 
+	private void createAndShowGUI(){
 		//create content
 		mainPanel = new JPanel();
 		buttonPanel = new JPanel();
@@ -58,7 +65,7 @@ public class GameWindow
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				window.openMenu();
+				parent.openMenu();
 			}
 		});
 		
@@ -80,14 +87,29 @@ public class GameWindow
 		setDefaultButton(playButton);
 	}
 	
+	/**
+	 * Provides the JPanel of the menu.
+	 *
+	 * @return menu JPanel.
+	 */
 	public JPanel getPanel(){
 		return mainPanel;
 	}
 	
+	/**
+	 * Set the default button in the menu.
+	 *
+	 * @param button the JButton to get focus.
+	 */
 	private void setDefaultButton(JButton button){
 		defaultButton = button;
 	}
 	
+	/**
+	 * Get the current defaul button in the menu.
+	 *
+	 * @return default menu button.
+	 */
 	public JButton getDefaultButton(){
 		return defaultButton;
 	}
@@ -97,13 +119,19 @@ public class GameWindow
 	 */
 	public void startGame(int gameMode){
 		startGame = false;
+		
 		racer.getPanel().requestFocusInWindow();
+		
 		if(highScoresDialog != null)
 			highScoresDialog.dispose();
+		
+		//remodel the button panel
 		playButton.setEnabled(false);
 		buttonPanel.remove(backButton);
 		buttonPanel.add(stopButton);
 		stopButton.setEnabled(true);
+		
+		//play the game
 		racer.start(gameMode);
 		while(racer.isPlaying()){
 			racer.update();
@@ -113,18 +141,22 @@ public class GameWindow
 	}
 	
 	/**
-	 * End the game.
+	 * End the game and display high scores.
 	 */
 	public void endGame(){
 		racer.stop();
+		
 		playButton.setEnabled(true);
 		stopButton.setEnabled(false);
 		buttonPanel.remove(stopButton);
 		buttonPanel.add(backButton);
+		
+		//Refresh the high score
 		if(racer.getScore() > scores.getHighScore()){
 			highScore.setText("High Score: " + racer.getScore());
 		}
 		
+		//open the high scores
 		if(racer.getScore() > scores.getLowScore())
 			highScoresDialog = new HighScoresDialog((JFrame) SwingUtilities.getWindowAncestor(mainPanel),scores,racer.getScore());
 		else
