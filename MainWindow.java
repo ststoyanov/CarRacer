@@ -11,9 +11,11 @@ public class MainWindow
 	private static final int SPEED_RUN  = 1;
 	
 	private JFrame window;
-	private static SpeedRun speedRun;
+	private static GameWindow game;
 	private static MenuWindow menu;
 	private static int active = MENU_WIN;
+	ImageIcon icon;
+	private static int gameMode = 0;
 	
 	/**
 	 * Constructor. Creates the game window.
@@ -21,36 +23,23 @@ public class MainWindow
 	public MainWindow(){
 		window = new JFrame();
         window.setTitle("Racer");
-		window.setIconImage(new ImageIcon(getClass().getResource("res/icon.png")).getImage());
+		try{
+		icon = new ImageIcon(getClass().getResource("res/icon.png"));
+		} catch (Exception e) { 
+			System.out.println("Icon not found."); 
+		}
 		
-		speedRun = new SpeedRun();
+		if(icon != null){
+			window.setIconImage(icon.getImage());
+		}
+		game = new GameWindow(this);
+		
 		openMenu();
 		window.setResizable(false);
 		window.setLocation(0,0);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void openMenu(){
-		menu = new MenuWindow(this);
-		active = MENU_WIN;
-		
-		window.getContentPane().removeAll();
-		window.setContentPane(menu.getPanel());
-		window.pack();
-		window.setVisible(true);
-
-	}
-	
-	public void openSpeedRun(){
-		
-		active = SPEED_RUN;
-		
-		window.getContentPane().removeAll();
-		window.setContentPane(speedRun.getPanel());
-		window.getRootPane().setDefaultButton(speedRun.getDefaultButton());
-		window.pack();
-		window.setVisible(true);
-	}
 	/**
 	 * Constructor. Creates the game window with a given title
 	 * @param name name of the game
@@ -58,6 +47,26 @@ public class MainWindow
     public MainWindow(String name){
 		this();
 		window.setTitle(name);
+	}
+	
+	public void openMenu(){
+		menu = new MenuWindow(this);
+		window.getRootPane().setDefaultButton(menu.getDefaultButton());
+		//window.getContentPane().removeAll();
+		window.setContentPane(menu.getPanel());
+		window.pack();
+		window.setVisible(true);
+
+	}
+	
+	public void openGame(int gameMode){
+		this.gameMode = gameMode;
+		
+		//window.getContentPane().removeAll();
+		window.setContentPane(game.getPanel());
+		window.getRootPane().setDefaultButton(game.getDefaultButton());
+		window.pack();
+		window.setVisible(true);
 	}
 
 	/**
@@ -67,7 +76,7 @@ public class MainWindow
 	public static void main(String[] args){
 		new MainWindow();
 		while(true)
-			if(speedRun.startGame)
-				speedRun.startGame();
+			if(game.startGame)
+				game.startGame(gameMode);
 	}
 }

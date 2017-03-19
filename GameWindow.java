@@ -15,6 +15,7 @@ public class GameWindow
 	private Racer racer;
 	private JButton playButton;
 	private JButton stopButton;
+	private JButton backButton;
 	private JLabel curScore;
 	private JLabel highScore;
 	public volatile boolean  startGame = false;
@@ -23,17 +24,18 @@ public class GameWindow
 	/**
 	 * Constructor. Creates the game window.
 	 */
-	public GameWindow(){
-		createAndShowGUI();
+	public GameWindow(MainWindow window){
+		createAndShowGUI(window);
 	}
 
-	private void createAndShowGUI(){
+	private void createAndShowGUI(MainWindow window){
 		//create content
 		mainPanel = new JPanel();
 		buttonPanel = new JPanel();
 		scorePanel = new JPanel();
 		playButton = new JButton("PLAY");
 		stopButton = new JButton("STOP");
+		backButton = new JButton("Back to menu");
 		curScore = new JLabel("Score: 0");
 		scores = new HighScoresControl();
 		highScore = new JLabel("High Score: " + scores.getHighScore());
@@ -53,6 +55,12 @@ public class GameWindow
 				racer.stop();
 			}
 		});
+		backButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				window.openMenu();
+			}
+		});
 		
 		//add content to the main panel
 		scorePanel.add(curScore);
@@ -61,7 +69,7 @@ public class GameWindow
 		mainPanel.add(scorePanel);
 		mainPanel.add(racer.getPanel());
 		buttonPanel.add(playButton);
-		buttonPanel.add(stopButton);
+		buttonPanel.add(backButton);
 		mainPanel.add(buttonPanel);
 		
 		//set layout
@@ -87,14 +95,16 @@ public class GameWindow
 	/**
 	 * Start the game.
 	 */
-	public void startGame(){
+	public void startGame(int gameMode){
 		startGame = false;
 		racer.getPanel().requestFocusInWindow();
 		if(highScoresDialog != null)
 			highScoresDialog.dispose();
 		playButton.setEnabled(false);
+		buttonPanel.remove(backButton);
+		buttonPanel.add(stopButton);
 		stopButton.setEnabled(true);
-		racer.start();
+		racer.start(gameMode);
 		while(racer.isPlaying()){
 			racer.update();
 			curScore.setText("Score: " + racer.getScore());
@@ -109,7 +119,8 @@ public class GameWindow
 		racer.stop();
 		playButton.setEnabled(true);
 		stopButton.setEnabled(false);
-		
+		buttonPanel.remove(stopButton);
+		buttonPanel.add(backButton);
 		if(racer.getScore() > scores.getHighScore()){
 			highScore.setText("High Score: " + racer.getScore());
 		}
