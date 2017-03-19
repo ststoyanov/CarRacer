@@ -8,6 +8,7 @@ import java.awt.event.*;
 public class MainWindow
 {
 	private JFrame window;
+	JLayeredPane layeredPanel;
 	private static GameWindow game;
 	private static MenuWindow menu;
 	ImageIcon icon;
@@ -18,6 +19,7 @@ public class MainWindow
 	 */
 	public MainWindow(){
 		window = new JFrame();
+		layeredPanel = new JLayeredPane();
 		
 		//Add title and image to the game
         window.setTitle("Racer");
@@ -30,13 +32,22 @@ public class MainWindow
 			window.setIconImage(icon.getImage());
 		}
 		
+		//open the game in the background
 		game = new GameWindow(this);
+		game.getPanel().setBounds( 0, 0,  Racer.SCREEN_WIDTH, Racer.SCREEN_HEIGHT );
+		layeredPanel.add(game.getPanel(),JLayeredPane.DEFAULT_LAYER);
 		
 		openMenu();
 		
+		//finalize and show window
+		layeredPanel.setPreferredSize(new Dimension(800, 600));
+		window.setContentPane(layeredPanel);
 		window.setResizable(false);
 		window.setLocation(0,0);
+		window.pack();
+		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 	}
 	
 	/**
@@ -49,29 +60,42 @@ public class MainWindow
 	}
 	
 	/**
-	 * Set the main window to present the menu.
+	 * Disable the game window and open the menu.
 	 */
 	public void openMenu(){
+		game.disableButtons();
+		
 		menu = new MenuWindow(this);
+		
+		menu.getPanel().setBounds( 300, 200,  200, 200 );
+		layeredPanel.add(menu.getPanel(),JLayeredPane.PALETTE_LAYER);
 		window.getRootPane().setDefaultButton(menu.getDefaultButton());
-		window.getContentPane().removeAll();
-		window.setContentPane(menu.getPanel());
-		window.pack();
-		window.setVisible(true);
-
+		
+		window.revalidate();
+		window.repaint();
+		
+		//set up the key events
+		//change the focused button by pressing the arrow keys
+		menu.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released LEFT"), "change button");
+		menu.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released RIGHT"), "change button");
+		menu.getPanel().getActionMap().put("change button", new AbstractAction("change button"){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				window.getRootPane().setDefaultButton(menu.getNextButton());
+			}
+		});
 	}
 	
 	/**
-	 * Set the main menu to present the game.
+	 * Close the menu window and enable the game.
 	 */
 	public void openGame(int gameMode){
 		this.gameMode = gameMode;
-		
-		window.getContentPane().removeAll();
-		window.setContentPane(game.getPanel());
+		game.enableButtons();
+		layeredPanel.remove(0);
 		window.getRootPane().setDefaultButton(game.getDefaultButton());
-		window.pack();
-		window.setVisible(true);
+		window.revalidate();
+		window.repaint();
 	}
 
 	/**

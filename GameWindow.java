@@ -64,6 +64,8 @@ public class GameWindow
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
+				if(highScoresDialog != null)
+					highScoresDialog.dispose();
 				parent.openMenu();
 			}
 		});
@@ -77,6 +79,7 @@ public class GameWindow
 		buttonPanel.add(playButton);
 		buttonPanel.add(backButton);
 		mainPanel.add(buttonPanel);
+		disableButtons();
 		
 		//set layout
 		scorePanel.setLayout(new BoxLayout(scorePanel,BoxLayout.LINE_AXIS));
@@ -95,6 +98,15 @@ public class GameWindow
 		return mainPanel;
 	}
 	
+	public void enableButtons(){
+		playButton.setEnabled(true);
+		backButton.setEnabled(true);
+	}
+	
+	public void disableButtons(){
+		playButton.setEnabled(false);
+		backButton.setEnabled(false);
+	}
 	/**
 	 * Set the default button in the menu.
 	 *

@@ -60,6 +60,14 @@ public class MenuWindow
 		return defaultButton;
 	}
 	
+	public JButton getNextButton(){
+		if(defaultButton == classic)
+			defaultButton = speedRun;
+		else
+			defaultButton = classic;
+		
+		return defaultButton;
+	}
 	/**
 	 * Provides the JPanel of the menu.
 	 *
