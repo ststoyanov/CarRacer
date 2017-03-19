@@ -56,7 +56,7 @@ public class Racer
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
 	private double randProb = 0; // variable for controling the probability of random event
-	private int currentGame = 0;
+	private int currentMode = 0;
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -93,7 +93,7 @@ public class Racer
     {
         if(!playing)
         {
-			currentGame = game;
+			currentMode = game;
 			
             // Create the player's car
             player = new Car("res/car.png",SCREEN_WIDTH/2, SCREEN_HEIGHT - 100, 40,70, arena);
@@ -186,7 +186,7 @@ public class Racer
      */
     private RoadSegment nextRoadSegment()
     {
-		if(currentGame == SPEED_RUN){
+		if(currentMode == SPEED_RUN){
 			//checks if the road is out of bounds and if so changes the direction
 			//also randomly changes the direction with increasing chance the longer it hasn't changed
 			if(currentRoadX <= ROAD_LEFT_BOUND || currentRoadX >= ROAD_RIGHT_BOUND || Math.random() < randProb){

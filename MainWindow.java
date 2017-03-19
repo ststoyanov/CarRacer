@@ -52,7 +52,7 @@ public class MainWindow
 	public void openMenu(){
 		menu = new MenuWindow(this);
 		window.getRootPane().setDefaultButton(menu.getDefaultButton());
-		//window.getContentPane().removeAll();
+		window.getContentPane().removeAll();
 		window.setContentPane(menu.getPanel());
 		window.pack();
 		window.setVisible(true);
@@ -62,7 +62,7 @@ public class MainWindow
 	public void openGame(int gameMode){
 		this.gameMode = gameMode;
 		
-		//window.getContentPane().removeAll();
+		window.getContentPane().removeAll();
 		window.setContentPane(game.getPanel());
 		window.getRootPane().setDefaultButton(game.getDefaultButton());
 		window.pack();
