@@ -12,7 +12,6 @@ public class MainWindow
 	private static GameWindow game;
 	private static MenuWindow menu;
 	ImageIcon icon;
-	private static int gameMode = 0;
 	
 	/**
 	 * Constructor. Creates the game window.
@@ -64,10 +63,10 @@ public class MainWindow
 	 */
 	public void openMenu(){
 		game.disableButtons();
-		
+		game.setMode(0);
 		menu = new MenuWindow(this);
 		
-		menu.getPanel().setBounds( 300, 200,  200, 200 );
+		menu.getPanel().setBounds( 300, 200,  220, 200 );
 		layeredPanel.add(menu.getPanel(),JLayeredPane.PALETTE_LAYER);
 		window.getRootPane().setDefaultButton(menu.getDefaultButton());
 		
@@ -90,8 +89,8 @@ public class MainWindow
 	 * Close the menu window and enable the game.
 	 */
 	public void openGame(int gameMode){
-		this.gameMode = gameMode;
 		game.enableButtons();
+		game.setMode(gameMode);
 		layeredPanel.remove(0);
 		window.getRootPane().setDefaultButton(game.getDefaultButton());
 		window.revalidate();
@@ -106,6 +105,6 @@ public class MainWindow
 		new MainWindow();
 		while(true)
 			if(game.startGame)
-				game.startGame(gameMode);
+				game.startGame();
 	}
 }
