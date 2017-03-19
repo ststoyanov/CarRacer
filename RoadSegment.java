@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Arrays;
 /**
  * Models a simple slice of road, a kerb and offroad grass for the game Racer.
  *
@@ -10,6 +13,7 @@ public class RoadSegment
     public static double KERB_WIDTH = 10;
 
     private Rectangle[] parts = new Rectangle[4];
+	private ArrayList<Rectangle> obstacles = new ArrayList<Rectangle>();
     private double xPosition;
     private double yPosition;
     private double width;
@@ -44,7 +48,7 @@ public class RoadSegment
         parts[1] = new Rectangle(roughX2, height/2, roughWidth2, height, ROUGH_COLOUR);
         parts[2] = new Rectangle(-width/2-KERB_WIDTH/2, height/2, KERB_WIDTH, height, KERB_COLOUR);
         parts[3] = new Rectangle(width/2+KERB_WIDTH/2, height/2, KERB_WIDTH, height, KERB_COLOUR);
-
+		
         this.setXPosition(x);
         this.setYPosition(y);
 
@@ -64,6 +68,9 @@ public class RoadSegment
         for (int i=0; i < parts.length; i++)
             parts[i].setXPosition(parts[i].getXPosition() + dx);
 
+		for(Rectangle obst : obstacles){
+			obst.setXPosition(obst.getXPosition() + dx);
+		}
         xPosition = x;
     }
 
@@ -77,7 +84,10 @@ public class RoadSegment
         double dy = y - yPosition;
         for (int i=0; i < parts.length; i++)
             parts[i].setYPosition(parts[i].getYPosition() + dy);
-
+		
+		for(Rectangle obst : obstacles){
+			obst.setYPosition(obst.getYPosition() + dy);
+		}
         yPosition = y;
     }
 
@@ -109,7 +119,12 @@ public class RoadSegment
      */
     public Rectangle[] getParts()
     {
-        return parts;
+		Collection<Rectangle> allParts = new ArrayList<Rectangle>();
+		allParts.addAll(Arrays.asList(parts));
+		allParts.addAll(obstacles);
+
+		Rectangle[] allPartsArray = allParts.toArray(new Rectangle[] {});
+        return allPartsArray;
     }
 
     /**
@@ -149,5 +164,25 @@ public class RoadSegment
     {
         for (int i=0; i < parts.length; i++)
             arena.removeRectangle(parts[i]);
+		for(Rectangle obst : obstacles){
+			arena.removeRectangle(obst);
+		}
     }
+	
+	public void addObstacle(int type){
+		switch(type){
+			case 0:
+				obstacles.add(new Rectangle(xPosition-width/3, yPosition, width/3, height*2, KERB_COLOUR));
+				obstacles.add(new Rectangle(xPosition+width/3, yPosition, width/3, height*2, KERB_COLOUR));
+				break;
+			case 1:
+				obstacles.add(new Rectangle(xPosition, yPosition, width/3, height*2, KERB_COLOUR));
+				break;
+		}
+		for(Rectangle obst : obstacles){
+			arena.addRectangle(obst);
+		}
+		System.out.println(obstacles.size());
+		
+	}
 }

@@ -49,10 +49,12 @@ public class Racer
     private GameArena arena;
     private Car player;
     private RoadSegment[] road = new RoadSegment[SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT + 1];
+	private Ball coin;
 
     private double currentRoadX = SCREEN_WIDTH/2;
     private double speed = INITIAL_SPEED;
     private boolean playing = false;
+	private boolean obstFlag = false;
     private int score = 0;
 	private int curveDirection = 0; //-1 for left, 1 for right
 	private double randProb = 0; // variable for controling the probability of random event
@@ -148,9 +150,13 @@ public class Racer
         if(playing)
         {
 			score++;
-			
-			if(score%500 == 0)
-				speedUp();
+			if(currentMode == SPEED_RUN){
+				if(score%500 == 0)
+					speedUp();
+			} else {
+				if(score%1000 == 0)
+					speedUp();
+			}
 
             double speed = 0;
             if (arena.leftPressed())
@@ -202,9 +208,17 @@ public class Racer
 			
 			currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
 		} else {
-			
+			if(Math.random() < randProb){
+					obstFlag = true;
+					randProb = -0.5;
+			}
+			randProb += 0.01;
 		}
         RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.5, arena);
+		if(obstFlag){
+			s.addObstacle((int)Math.round(Math.random()));
+			obstFlag = false;
+		}
         s.setYSpeed(speed);
         return s;
     }
