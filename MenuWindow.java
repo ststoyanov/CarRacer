@@ -8,10 +8,12 @@ import java.awt.event.*;
 public class MenuWindow
 {
 	private JPanel mainPanel;
-	JButton speedRun;
-	JButton classic;
-	JButton defaultButton;
-	
+	private JButton speedRun;
+	private JButton classic;
+	private JButton defaultButton;
+	private JButton highScoresCl;
+	private JButton chooseCar;
+	private JButton highScoresSR;
 	/**
 	 * Creates the menu.
 	 *
@@ -37,8 +39,29 @@ public class MenuWindow
 			}
 		});
 		
+		highScoresCl = new JButton("High scores");
+		highScoresCl.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				new HighScoresDialog((JFrame) SwingUtilities.getWindowAncestor(mainPanel), new HighScoresControl("classic"),-1);
+			}
+		});
+		
+		highScoresSR = new JButton("High scores");
+		highScoresSR.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				new HighScoresDialog((JFrame) SwingUtilities.getWindowAncestor(mainPanel), new HighScoresControl("speedrun"),-1);
+			}
+		});
+
+		chooseCar = new JButton("Choose Car");
+		
 		mainPanel.add(classic);
+		mainPanel.add(highScoresCl);
 		mainPanel.add(speedRun);
+		mainPanel.add(highScoresSR);
+		mainPanel.add(chooseCar);
 		setDefaultButton(classic);
 	}
 	
