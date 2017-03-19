@@ -27,7 +27,7 @@ public class MenuWindow
 				parent.openGame(Racer.SPEED_RUN);
 			}
 		});
-		mainPanel.add(speedRun);
+		
 		
 		classic = new JButton("CLASSIC");
 		classic.addActionListener(new ActionListener(){
@@ -36,9 +36,10 @@ public class MenuWindow
 				parent.openGame(Racer.CLASSIC);
 			}
 		});
-		mainPanel.add(classic);
 		
-		setDefaultButton(speedRun);
+		mainPanel.add(classic);
+		mainPanel.add(speedRun);
+		setDefaultButton(classic);
 	}
 	
 	/**

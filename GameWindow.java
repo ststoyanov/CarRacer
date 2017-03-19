@@ -49,7 +49,6 @@ public class GameWindow
 		racer = new Racer();
 
 		//setting up the buttons
-		stopButton.setEnabled(false);
 		playButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -129,7 +128,8 @@ public class GameWindow
 		playButton.setEnabled(false);
 		buttonPanel.remove(backButton);
 		buttonPanel.add(stopButton);
-		stopButton.setEnabled(true);
+		buttonPanel.revalidate();
+		buttonPanel.repaint();
 		
 		//play the game
 		racer.start(gameMode);
@@ -147,9 +147,10 @@ public class GameWindow
 		racer.stop();
 		
 		playButton.setEnabled(true);
-		stopButton.setEnabled(false);
 		buttonPanel.remove(stopButton);
 		buttonPanel.add(backButton);
+		buttonPanel.revalidate();
+		buttonPanel.repaint();
 		
 		//Refresh the high score
 		if(racer.getScore() > scores.getHighScore()){
