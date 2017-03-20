@@ -96,7 +96,7 @@ public class Racer
             // Create the initial road layout
             for (int s = road.length-1; s >= 0 ; s--)
             {
-                road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.5, arena);
+                road[s] = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.25, arena);
                 road[s].setYPosition(s*ROAD_SEGMENT_HEIGHT);
 				road[s].setYSpeed(INITIAL_SPEED);
             }
@@ -193,7 +193,7 @@ public class Racer
 		}
 		
         currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
-        RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.5, arena);
+        RoadSegment s = new RoadSegment(currentRoadX, -ROAD_SEGMENT_HEIGHT, ROAD_SEGMENT_WIDTH, ROAD_SEGMENT_HEIGHT+0.25, arena);
         s.setYSpeed(speed);
         return s;
     }
