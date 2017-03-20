@@ -45,10 +45,10 @@ public class GameWindow
 		playButton = new JButton("PLAY");
 		stopButton = new JButton("STOP");
 		backButton = new JButton("Back to menu");
-		curScore = new JLabel("");
+		curScore = new JLabel("Score: 0");
 		modeName = new JLabel("");
-		
-		highScore = new JLabel("");
+		scores = new HighScoresControl();
+		highScore = new JLabel("High Score: " + scores.getHighScore());
 		racer = new Racer();
 
 		//setting up the buttons
@@ -139,8 +139,6 @@ public class GameWindow
 			setMode(gameMode);
 		racer.getPanel().requestFocusInWindow();
 		
-		curScore.setText("Score: 0");
-		highScore.setText("High Score: " + scores.getHighScore());
 		if(highScoresDialog != null)
 			highScoresDialog.dispose();
 		
@@ -166,18 +164,12 @@ public class GameWindow
 	
 	public void setMode(int gameMode){
 		this.gameMode = gameMode;
-		if(gameMode == Racer.SPEED_RUN){
+		if(gameMode == Racer.SPEED_RUN)
 			modeName.setText("Speed Run");
-			scores = new HighScoresControl("speedrun");
-		} else if(gameMode == Racer.CLASSIC) {
+		else if(gameMode == Racer.CLASSIC)
 			modeName.setText("Classic");
-			scores = new HighScoresControl("classic");
-		}
-		else {
+		else 
 			modeName.setText("");
-			curScore.setText("");
-			highScore.setText("");
-		}
 	}
 	/**
 	 * End the game and display high scores.
