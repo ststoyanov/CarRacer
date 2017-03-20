@@ -107,10 +107,18 @@ public class Sprite extends Image
 	 */
     public boolean isTouching(Rectangle r)
     {
-        return (xPosition - width/2 < r.getXPosition() + r.getWidth()/2 &&		
-                xPosition + width/2 > r.getXPosition() - r.getWidth()/2 &&
-                yPosition - height/2 < r.getYPosition() + r.getHeight()/2 &&
-                yPosition + height/2 > r.getYPosition() - r.getHeight()/2);
+        return (xPosition - width/2 + 3 < r.getXPosition() + r.getWidth()/2 &&		
+                xPosition + width/2 - 3 > r.getXPosition() - r.getWidth()/2 &&
+                yPosition - height/2 + 3< r.getYPosition() + r.getHeight()/2 &&
+                yPosition + height/2 - 3> r.getYPosition() - r.getHeight()/2);
+    }
+	
+	public boolean isTouching(Ball b)
+    {
+        return (xPosition - width/2 < b.getXPosition() + b.getSize()/2 &&		
+                xPosition + width/2 > b.getXPosition() - b.getSize()/2 &&
+                yPosition - height/2 < b.getYPosition() + b.getSize()/2 &&
+                yPosition + height/2 > b.getYPosition() - b.getSize()/2);
     }
 
 

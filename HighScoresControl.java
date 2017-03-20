@@ -13,17 +13,17 @@ public class HighScoresControl{
 	private File highScoresFile;
 	private BufferedReader reader;
 	private PrintWriter writer;
-	private final String filePath = ".highscores";
+	private final String fileType = ".highscores";
 	
 	/**
 	 * Constructor. Loads the high scores.
 	 */
-	public HighScoresControl(){
+	public HighScoresControl(String fileName){
 		highScores = new PersonalScore[10];
-		highScoresFile = new File(filePath);
+		highScoresFile = new File(fileName+fileType);
 		try{
 			load();
-		}catch(IOException ex){ ex.printStackTrace(System.out); }
+		}catch(IOException ex){  System.out.println(ex.getMessage());}
 	}
 	
 	/**
