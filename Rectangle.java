@@ -149,7 +149,7 @@ public class Rectangle
 	/**
      * Determines if this rectangle is touching the given Ball.
      *
-     * @param Ball the ball to test agains.
+     * @param b the Ball to test agains.
      * @return true of this rectangle is touching the given ball, false otherwise.
      */
 	public boolean isTouching(Ball b)

@@ -73,6 +73,8 @@ public class MainWindow
 	
 	/**
 	 * Close the menu window and enable the game.
+	 *
+	 * @param gameMode the game mode to start
 	 */
 	public void openGame(int gameMode){
 		//close the menu
@@ -89,7 +91,7 @@ public class MainWindow
 	/**
 	 * Sets the button which can be used by pressing the Enter key.
 	 *
-	 * @params button the button to be used with Enter
+	 * @param button the button to be used with Enter
 	 */
 	public void setDefaultButton(JButton button){
 		window.getRootPane().setDefaultButton(button);

@@ -112,7 +112,7 @@ public class MenuWindow
 	/**
 	 * Set the car type for the game to be run.
 	 *
-	 * @params carType one of the car types from the Car class.
+	 * @param carType one of the car types from the Car class.
 	 */
 	public void setCarType(String carType){
 		parent.game.setCarType(carType);
