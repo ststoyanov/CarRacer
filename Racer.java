@@ -31,6 +31,7 @@ import javax.swing.*;
  */
 public class Racer 
 {
+	//static variables
     public static final double PLAYER_SPEED = 2.5;
     public static final int ROAD_SEGMENT_WIDTH = 200;
     public static final int ROAD_SEGMENT_HEIGHT = 4;
@@ -42,15 +43,16 @@ public class Racer
 	public static final double INITIAL_SPEED = 1.5;
 	public static final int LEVEL_UP_SCORE = 500;
 	
+	//static game modes
 	public static final int CLASSIC = 1;
 	public static final int SPEED_RUN = 2;
-	
 
     private GameArena arena;
     private Car player;
     private RoadSegment[] road = new RoadSegment[SCREEN_HEIGHT / ROAD_SEGMENT_HEIGHT + 1];
 	private Ball coin;
-
+	
+	private String carType = Car.RED_CAR;
     private double currentRoadX = SCREEN_WIDTH/2;
     private double speed = INITIAL_SPEED;
     private boolean playing = false;
@@ -60,6 +62,7 @@ public class Racer
 	private double randProb = 0; // variable for controling the probability of random event
 	private int gameMode = 0;
 	public int coins = 0;
+	
 
     /**
      * Creates a new instance of the Racer racing game.
@@ -90,7 +93,7 @@ public class Racer
     }
 
     /**
-     * Starts a new game in a chosen game mode, if the game is not alreayd running.
+     * Starts a new game in a chosen game mode, if the game is not already running.
 	 *
 	 * @param gameMode the game mode to be started (Racer.SPEED_RUN or Racer.CLASSIC).
      */
@@ -102,7 +105,7 @@ public class Racer
 			this.gameMode = gameMode;
 			
             // Create the player's car
-            player = new Car("res/car.png",SCREEN_WIDTH/2, SCREEN_HEIGHT - 100, 40,70, arena);
+            player = new Car(carType,SCREEN_WIDTH/2, SCREEN_HEIGHT - 100, 40,70, arena);
 			
 			currentRoadX = SCREEN_WIDTH/2;
 			
@@ -159,7 +162,7 @@ public class Racer
 			//depending on the game mode control the difficulty 
 			if(gameMode == SPEED_RUN){
 				if(score%500 == 0)
-					speedUp();
+					speedUp(0.5);
 			} else {
 				if(score%1000 == 0)
 					speedUp();
@@ -193,7 +196,7 @@ public class Racer
 
         arena.pause();
     }
-
+	
     /**
      * Provides a randomly generated, thin slice of road. 
      * This method is used periodically to create new road on the screen in front of the player's car.
@@ -220,9 +223,10 @@ public class Racer
 			currentRoadX += Math.random() * ROAD_CURVE_SPEED * curveDirection;
 		} else if(gameMode == CLASSIC) {
 			//add obstacles on random intervals
+			//chance of obstacle appearing increases the longer there hasn't been one
 			if(Math.random() < randProb){
 					obstFlag = true;
-					randProb = -0.5;
+					randProb = -1;
 			}
 			randProb += 0.01;
 		}
@@ -273,6 +277,15 @@ public class Racer
     }
 	
 	/**
+	 * Set the car type for the game.
+	 *
+	 * @param carType type of car (static variable of Car class)
+	 */
+	public void setCarType(String carType){
+		this.carType = carType;
+	}
+	
+	/**
 	 * Speeds up the game by a given value.
 	 *
 	 * @param up speed up by that much.
@@ -289,10 +302,10 @@ public class Racer
 	 * Speeds up the game by 0.5.
 	 */
 	private void speedUp(){
-		speedUp(0.5);
+		speedUp(1);
 	}
 
-  /**
+	/**
      * A simple example of usage
      *
      * @param args unused.

@@ -7,7 +7,11 @@ public class Car
 {
     public static String CAR_COLOUR = "#FF0000";
     public static String WHEEL_COLOUR = "#404040";
-
+	
+	public static final String RED_CAR = "res/redcar.png";
+	public static final String YELLOW_CAR = "res/yellowcar.png";
+	public static final String POLICE_CAR = "res/policecar.png";
+	
     private Rectangle[] parts = new Rectangle[7];
     private double xPosition;
     private double yPosition;
@@ -15,10 +19,11 @@ public class Car
 
     private double xSpeed;
     private double ySpeed;
-	private Sprite sprite;
-	private boolean spriteActive = false;
 	private double width;
 	private double height;
+
+	private Sprite sprite;
+	private boolean spriteActive = false;
 
     /**
      * Creates a new Car at the given location.

@@ -8,49 +8,48 @@ import java.awt.event.*;
 public class MainWindow
 {
 	private JFrame window;
-	JLayeredPane layeredPanel;
-	private static GameWindow game;
-	private static MenuWindow menu;
-	ImageIcon icon;
+	JLayeredPane mainPanel;
+	
+	public static GameWindow game;
+	public static MenuWindow menu;
 	
 	/**
-	 * Constructor. Creates the game window.
+	 * Constructor; creates the game window.
 	 */
 	public MainWindow(){
 		window = new JFrame();
-		layeredPanel = new JLayeredPane();
+		mainPanel = new JLayeredPane();
 		
-		//Add title and image to the game
+		//Add title and icon to the game
         window.setTitle("Racer");
 		try{
-		icon = new ImageIcon(getClass().getResource("res/icon.png"));
-		} catch (Exception e) { 
-			System.out.println("Icon not found."); 
-		}
-		if(icon != null){
+			ImageIcon icon = new ImageIcon(getClass().getResource("res/icon.png"));
 			window.setIconImage(icon.getImage());
-		}
+		} catch (Exception e) { System.out.println("Icon not found."); }
 		
 		//open the game in the background
 		game = new GameWindow(this);
 		game.getPanel().setBounds( 0, 0,  Racer.SCREEN_WIDTH, Racer.SCREEN_HEIGHT );
-		layeredPanel.add(game.getPanel(),JLayeredPane.DEFAULT_LAYER);
+		mainPanel.add(game.getPanel(),JLayeredPane.DEFAULT_LAYER);
 		
-		openMenu();
+		//open the menu
+		menu = new MenuWindow(this);
+		menu.getPanel().setBounds( 300, 200,  220, 200 );
+		mainPanel.add(menu.getPanel(),JLayeredPane.PALETTE_LAYER);
 		
 		//finalize and show window
-		layeredPanel.setPreferredSize(new Dimension(800, 600));
-		window.setContentPane(layeredPanel);
+		mainPanel.setPreferredSize(new Dimension(800, 600));
+		window.setContentPane(mainPanel);
 		window.setResizable(false);
 		window.setLocation(0,0);
 		window.pack();
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 	
 	/**
-	 * Constructor. Creates the game window with a given title
+	 * Constructor; creates the game window with a given title
+	 *
 	 * @param name name of the game
 	 */
     public MainWindow(String name){
@@ -62,43 +61,43 @@ public class MainWindow
 	 * Disable the game window and open the menu.
 	 */
 	public void openMenu(){
+		//disable the game
 		game.disableButtons();
 		game.setMode(0);
-		menu = new MenuWindow(this);
 		
-		menu.getPanel().setBounds( 300, 200,  220, 200 );
-		layeredPanel.add(menu.getPanel(),JLayeredPane.PALETTE_LAYER);
-		window.getRootPane().setDefaultButton(menu.getDefaultButton());
-		
+		//open the menu
+		mainPanel.add(menu.getPanel(),JLayeredPane.PALETTE_LAYER);
 		window.revalidate();
 		window.repaint();
-		
-		//set up the key events
-		//change the focused button by pressing the arrow keys
-		menu.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released LEFT"), "change button");
-		menu.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released RIGHT"), "change button");
-		menu.getPanel().getActionMap().put("change button", new AbstractAction("change button"){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				window.getRootPane().setDefaultButton(menu.getNextButton());
-			}
-		});
 	}
 	
 	/**
 	 * Close the menu window and enable the game.
 	 */
 	public void openGame(int gameMode){
+		//close the menu
+		mainPanel.remove(0);
+		
+		//enable the game
 		game.enableButtons();
 		game.setMode(gameMode);
-		layeredPanel.remove(0);
 		window.getRootPane().setDefaultButton(game.getDefaultButton());
 		window.revalidate();
 		window.repaint();
 	}
 
 	/**
+	 * Sets the button which can be used by pressing the Enter key.
+	 *
+	 * @params button the button to be used with Enter
+	 */
+	public void setDefaultButton(JButton button){
+		window.getRootPane().setDefaultButton(button);
+	}
+	
+	/**
 	 * Initialize the window and run the game.
+	 *
 	 * @param args unused
 	 */
 	public static void main(String[] args){

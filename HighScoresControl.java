@@ -17,10 +17,12 @@ public class HighScoresControl{
 	
 	/**
 	 * Constructor. Loads the high scores.
+	 *
+	 * @param filePath path of the high scores file without type
 	 */
-	public HighScoresControl(String fileName){
+	public HighScoresControl(String filePath){
 		highScores = new PersonalScore[10];
-		highScoresFile = new File(fileName+fileType);
+		highScoresFile = new File(filePath+fileType);
 		try{
 			load();
 		}catch(IOException ex){  System.out.println(ex.getMessage());}

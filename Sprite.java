@@ -113,6 +113,11 @@ public class Sprite extends Image
                 yPosition + height/2 - 3> r.getYPosition() - r.getHeight()/2);
     }
 	
+	/**
+	 * Check if the Sprite is touching a given Ball.
+	 * @param b the given Ball
+	 * @return returns true if the Sprite is touching the Ball, otherwise returns false
+	 */
 	public boolean isTouching(Ball b)
     {
         return (xPosition - width/2 < b.getXPosition() + b.getSize()/2 &&		

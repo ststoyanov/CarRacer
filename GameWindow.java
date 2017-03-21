@@ -9,6 +9,9 @@ public class GameWindow
 {
 	private HighScoresDialog highScoresDialog;
 	private HighScoresControl scores;
+	
+	private MainWindow parent;
+		
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
 	private JPanel scorePanel;
@@ -19,9 +22,10 @@ public class GameWindow
 	private JLabel curScore;
 	public JLabel modeName;
 	private JLabel highScore;
-	public volatile boolean  startGame = false;
+	
 	private JButton defaultButton;
-	private MainWindow parent;
+	public volatile boolean  startGame = false;
+
 	private int gameMode = 0;
 	
 	/**
@@ -47,7 +51,6 @@ public class GameWindow
 		backButton = new JButton("Back to menu");
 		curScore = new JLabel("");
 		modeName = new JLabel("");
-		
 		highScore = new JLabel("");
 		racer = new Racer();
 
@@ -58,12 +61,14 @@ public class GameWindow
 				startGame = true;
 			}
 		});
+		
 		stopButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				racer.stop();
 			}
 		});
+		
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -79,19 +84,21 @@ public class GameWindow
 		scorePanel.add(modeName);
 		scorePanel.add(Box.createHorizontalGlue());
 		scorePanel.add(highScore);
-		mainPanel.add(scorePanel);
-		mainPanel.add(racer.getPanel());
+		
 		buttonPanel.add(playButton);
 		buttonPanel.add(backButton);
+		
+		mainPanel.add(scorePanel);
+		mainPanel.add(racer.getPanel());
 		mainPanel.add(buttonPanel);
-		disableButtons();
 		
 		//set layout
 		scorePanel.setLayout(new BoxLayout(scorePanel,BoxLayout.LINE_AXIS));
 		buttonPanel.setLayout(new GridLayout(1,2));
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.PAGE_AXIS));
 		
-		setDefaultButton(playButton);
+		disableButtons();
+		defaultButton = playButton;
 	}
 	
 	/**
@@ -103,21 +110,31 @@ public class GameWindow
 		return mainPanel;
 	}
 	
+	/**
+	 * Enable the game buttons.
+	 */
 	public void enableButtons(){
 		playButton.setEnabled(true);
 		backButton.setEnabled(true);
+		stopButton.setEnabled(true);
 	}
 	
+	/**
+	 * Disable the game buttons.
+	 */
 	public void disableButtons(){
 		playButton.setEnabled(false);
 		backButton.setEnabled(false);
+		stopButton.setEnabled(false);
 	}
+	
 	/**
 	 * Set the default button in the menu.
 	 *
 	 * @param button the JButton to get focus.
 	 */
 	private void setDefaultButton(JButton button){
+		parent.setDefaultButton(button);
 		defaultButton = button;
 	}
 	
@@ -132,18 +149,23 @@ public class GameWindow
 	
 	/**
 	 * Start the game.
+	 *
+	 * @param gameMode the game mode to start the game in.
 	 */
 	public void startGame(int gameMode){
 		startGame = false;
+		
+		if(highScoresDialog != null)
+			highScoresDialog.dispose();
+		
 		if(this.gameMode != gameMode)
 			setMode(gameMode);
+		
 		racer.getPanel().requestFocusInWindow();
 		
 		curScore.setText("Score: 0");
 		highScore.setText("High Score: " + scores.getHighScore());
-		if(highScoresDialog != null)
-			highScoresDialog.dispose();
-		
+
 		//remodel the button panel
 		playButton.setEnabled(false);
 		buttonPanel.remove(backButton);
@@ -157,33 +179,54 @@ public class GameWindow
 			racer.update();
 			curScore.setText("Score: " + racer.getScore());
 		}
+		
 		endGame();
 	}
 	
+	/**
+	 * Start the game in the current gameMode.
+	 */
 	public void startGame(){
 		this.startGame(gameMode);
 	}
 	
+	/**
+	 * Set the car type for the game to be run.
+	 *
+	 * @param carType one of the static car types from the Car class.
+	 */
+	public void setCarType(String carType){
+		racer.setCarType(carType);
+	}
+	
+	/**
+	 * Set the game mode.
+	 *
+	 * @param gameMode one of the static game modes from Racer.
+	 */
 	public void setMode(int gameMode){
 		this.gameMode = gameMode;
+		
 		if(gameMode == Racer.SPEED_RUN){
 			modeName.setText("Speed Run");
 			scores = new HighScoresControl("speedrun");
 		} else if(gameMode == Racer.CLASSIC) {
 			modeName.setText("Classic");
 			scores = new HighScoresControl("classic");
-		}
-		else {
+		} else {
 			modeName.setText("");
 			curScore.setText("");
 			highScore.setText("");
 		}
 	}
+	
 	/**
 	 * End the game and display high scores.
 	 */
 	public void endGame(){
 		racer.stop();
+		
+		//remodel the button panel
 		playButton.setEnabled(true);
 		buttonPanel.remove(stopButton);
 		buttonPanel.add(backButton);
@@ -195,7 +238,7 @@ public class GameWindow
 			highScore.setText("High Score: " + racer.getScore());
 		}
 		
-		//open the high scores
+		//open the high scores dialog
 		if(racer.getScore() > scores.getLowScore())
 			highScoresDialog = new HighScoresDialog((JFrame) SwingUtilities.getWindowAncestor(mainPanel),scores,racer.getScore());
 		else
